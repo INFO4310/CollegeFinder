@@ -1,11 +1,43 @@
 <html>
     <head>
+        <script src="https://d3js.org/d3.v5.min.js"></script>
         <style>
 
         </style>
     </head>
     <body>
         <script>
+        const loadCollegeMap = async () => {
+
+            ////////////////////////////data manipulation/////////////////////////
+            // const data = await d3.csv('MERGED2018_19_PP.csv')
+
+            // var newData = data.map((d) => {
+            //     return {
+            //         name: d.INSTNM,
+            //         lat: d.LATITUDE,
+            //         lon: d.LONGITUDE,
+            //         tuition: d.COSTT4_A,
+            //         SAT: d.SAT_AVG,
+            //         ACT: d.ACTCMMID,
+            //         admissions: d.ADM_RATE,
+            //         size: d.UG
+            //     }
+            // })
+
+            //console.log(JSON.stringify(newData))
+
+            //////////////////////////////calling filtered data ////////////////////////
+            
+            const data = await d3.json('filteredCollegeData.json')
+
+            console.log(data)
+        
+        }
+
+        loadCollegeMap()
+
+
         </script>
     </body>
 </html>
