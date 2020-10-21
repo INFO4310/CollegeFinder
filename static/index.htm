@@ -23,8 +23,7 @@
 </head>
 
 <body>
-<!-- more information can be found here: https://getbootstrap.com/docs/4.3/components/collapse/ -->
-
+    <!-- more information can be found here: https://getbootstrap.com/docs/4.3/components/collapse/ -->
     <div class="accordion" id="collegeQuiz">
 
         <!-- Start card for Location -->
@@ -42,7 +41,8 @@
                 <div class="card-body" id="location-card">
                     <label for="states">Choose a state:</label>
 
-                    <select name="states" id="states">
+                    <!-- Arielle: needs to be changed for multiple states! -->
+                    <select name="states" id="states" onclick=loadCollegeMap()>
                         <option value="all states">All States</option>
                         <option value="alabama">Alabama</option>
                         <option value="alaska">Alaska</option>
@@ -108,14 +108,15 @@
                 <h2 class="mb-0">
                     <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
                         data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                       Tuition
+                        Tuition
                     </button>
                 </h2>
             </div>
             <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#collegeQuiz">
                 <div class="card-body">
-                <label for="tuition">Tuition (between $0 and $100,000)</label></br>
-                <input type="range" id="tuition" name="tuition" min="0" max="100,000"></br>
+                    <label for="tuition">Tuition (between $0 and $100,000):&nbsp</label><label for="tuition"
+                        id="tuitionNumber">$50,000</label></br>
+                    <input type="range" id="tuition" name="tuition" min="0" max="100000" onclick=loadCollegeMap()></br>
                 </div>
             </div>
         </div>
@@ -134,137 +135,183 @@
             <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#collegeQuiz">
                 <div class="card-body">
                     <p>Choose a size:</p>
-                    <input type="checkbox" id="size1" name="size" value="100">
+                    <input type="checkbox" id="size1" class="size" name="size" value="100" onclick=loadCollegeMap()>
                     <label for="size1">0 - 100 students</label><br>
-                    <input type="checkbox" id="size2" name="size" value="1000">
-                    <label for="size2">100 - 1,000 students</label><br>  
-                    <input type="checkbox" id="size3" name="size" value="10000">
+                    <input type="checkbox" id="size2" class="size" name="size" value="1000" onclick=loadCollegeMap()>
+                    <label for="size2">100 - 1,000 students</label><br>
+                    <input type="checkbox" id="size3" class="size" name="size" value="10000" onclick=loadCollegeMap()>
                     <label for="size3">1,000 - 10,000 students</label><br>
-                    <input type="checkbox" id="size4" name="size" value="50000">
+                    <input type="checkbox" id="size4" class="size" name="size" value="50000" onclick=loadCollegeMap()>
                     <label for="size4">10,000 - 50,000 students</label><br>
-                    <input type="checkbox" id="size5" name="size" value="100000">
+                    <input type="checkbox" id="size5" class="size" name="size" value="100000" onclick=loadCollegeMap()>
                     <label for="size5">50,000 - 100,000 students</label><br>
-                    
+
                     <br>
                     <!-- <input type="submit" value="Submit"> -->
                 </div>
             </div>
         </div>
-    <!-- End card for Size -->
+        <!-- End card for Size -->
 
-    <!-- Start card for Test Scores -->
-    <div class="card">
-        <div class="card-header" id="headingFour">
-            <h2 class="mb-0">
-                <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseFour"
-                    aria-expanded="true" aria-controls="collapseFour">
-                    Test Scores
-                </button>
-            </h2>
-        </div>
-        <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#collegeQuiz">
-            <div class="card-body">
-                <input type="checkbox" id="SAT_score" name="SAT_score">
-                <label for="SAT_score">SAT</label></br>
-                <label for="points">Score (between 0 and 1600):</label></br>
-                <input type="range" id="SAT_score_points" name="SAT_score_points" min="0" max="1600"></br>
-                <input type="checkbox" id="ACT_score" name="ACT_score">
-                <label for="ACT_score">ACT</label></br>
-                <label for="points">Score (between 0 and 36):</label></br>
-                <input type="range" id="ACT_score_points" name="ACT_score_points" min="0" max="36"></br>
+        <!-- Start card for Test Scores -->
+        <div class="card">
+            <div class="card-header" id="headingFour">
+                <h2 class="mb-0">
+                    <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
+                        data-target="#collapseFour" aria-expanded="true" aria-controls="collapseFour">
+                        Test Scores
+                    </button>
+                </h2>
             </div>
-        </div>
+            <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#collegeQuiz">
+                <div class="card-body">
+                    <input type="checkbox" id="SAT_score" name="SAT_score">
+                    <label for="SAT_score">SAT</label></br>
+                    <label for="SAT_score_points">Score (between 0 and 1600):&nbsp</label><label for="SAT_score_points"
+                        id="SATNumber">0</label></br>
+                    <input type="range" id="SAT_score_points" name="SAT_score_points" min="0" max="1600"
+                        onchange=loadCollegeMap()></br>
+                    <input type="checkbox" id="ACT_score" name="ACT_score">
+                    <label for="ACT_score">ACT</label></br>
+                    <label for="ACT_score_points">Score (between 0 and 36):&nbsp</label><label for="ACT_score_points"
+                        id="ACTNumber">0</label></br>
+                    <input type="range" id="ACT_score_points" name="ACT_score_points" min="0" max="36"
+                        onchange=loadCollegeMap()></br>
+                </div>
+            </div>
         </div>
     </div>
     <!-- End card for Test Scores -->
 
-
     <script>
+        ////////////////////////////data manipulation/////////////////////////
+        // const data = await d3.csv('MERGED2018_19_PP.csv')
+
+        // var newData = data.map((d) => {
+        //     return {
+        //         name: d.INSTNM,
+        //         lat: d.LATITUDE,
+        //         lon: d.LONGITUDE,
+        //         tuition: d.COSTT4_A,
+        //         SAT: d.SAT_AVG,
+        //         ACT: d.ACTCMMID,
+        //         admissions: d.ADM_RATE,
+        //         size: d.UG
+        //     }
+        // })
+
+        //console.log(JSON.stringify(newData))
+
+        //////////////////////////////calling filtered data ////////////////////////
+
         const loadCollegeMap = async () => {
 
-            ////////////////////////////data manipulation/////////////////////////
-            // const data = await d3.csv('MERGED2018_19_PP.csv')
+            //load data
+            const AllData = await d3.json('filteredCollegeData.json')
 
-            // var newData = data.map((d) => {
-            //     return {
-            //         name: d.INSTNM,
-            //         lat: d.LATITUDE,
-            //         lon: d.LONGITUDE,
-            //         tuition: d.COSTT4_A,
-            //         SAT: d.SAT_AVG,
-            //         ACT: d.ACTCMMID,
-            //         admissions: d.ADM_RATE,
-            //         size: d.UG
-            //     }
+            //get states
+            var state = d3.select('#states').property("value")
+            //TO DO: need to change this to a forEach loop
+            // newData = AllData.filter((d) => {
+            //     return (d.state = state)
             // })
 
-            //console.log(JSON.stringify(newData))
+            //get tuition
+            var tuition = d3.select('#tuition').property("value")
+            d3.select('#tuitionNumber').text("$"+formatNumber(tuition))
 
-            //////////////////////////////calling filtered data ////////////////////////
+            //get sizes
+            var sizes = [];
+            var checkedSize = d3.selectAll("input.size:checked")._groups[0];
+            checkedSize.forEach((d) => {
+                sizes.push(Number(d.value))
+            });
 
-            const data = await d3.json('filteredCollegeData.json')
+            //get test scores
+            var SATVal = d3.select('#SAT_score_points').property("value")
+            d3.select('#SATNumber').text(SATVal)
+            var ACTVal = d3.select('#ACT_score_points').property("value")
+            d3.select('#ACTNumber').text(ACTVal)
 
-            console.log(data)
+            console.log(state, tuition, sizes)
+
+            //call UpdateData
+
+            UpdateData(AllData, state, tuition, sizes, SATVal, ACTVal)
+            updateTuitionLabel()
+            updateSATLabel()
+            updateACTLabel()
+
+        }
+
+        //helper functions!
+
+        //present number with comma
+        function formatNumber(num) {
+            format = d3.format(",");
+            return (format(num))
+        }
+
+        function UpdateData(AllData) {
+            var newData = {};
+            console.log("updating data")
+        }
 
 
-            //Emily's Code
-            satInput = d3.select("#")
+        function updateTuitionLabel() {
 
+        }
 
-            
-            
-            // function updateData() {
-            //     newData = data;
-            //     //change new data based on what input is changed
-            // }
-            //End Emily's Code
+        function updateSATLabel() {
 
+        }
+        function updateACTLabel() {
 
-            //Arielle's Code
+        }
 
-
-
-
-            //update(allData, false); 
-    // d3.select("#btn").on("click", event=>{
-    //   let filterDataset = allData.filter(d=>{
-    //     return (d.Country === "us"); 
-    //   })
-    //   update(filterDataset, true); 
-    // });
-    // d3.select("#All").on("click", event=>{
-    //   update(allData, true); 
-    // }); 
-    // d3.select("#US").on("click", event=>{
-    //   let filterDataset = allData.filter(d=>{
-    //     return (d.Country === "us"); 
-    //   })
-    //   update(filterDataset, true); 
-    // });
-    // d3.select("#GB").on("click", event=>{
-    //   let filterDataset = allData.filter(d=>{
-    //     return (d.Country === "gb"); 
-    //   })
-    //   update(filterDataset, true); 
-    // });
-    // d3.select("#DE").on("click", event=>{
-    //   let filterDataset = allData.filter(d=>{
-    //     return (d.Country === "de"); 
-    //   })
-    //   update(filterDataset, true); 
-    // });
-    // d3.select("#AU").on("click", event=>{
-    //   let filterDataset = allData.filter(d=>{
-    //     return (d.Country === "au"); 
-    //   })
-    //   update(filterDataset, true); 
-    // });
-    // d3.select("#CA").on("click", event=>{
-    //   let filterDataset = allData.filter(d=>{
-    //     return (d.Country === "ca"); 
-    //   })
-    //   update(filterDataset, true); 
-    // });
+        function makeMap() {
+            //Jennifer's code
+        }
+            //update(allData, false);
+            // d3.select("#btn").on("click", event=>{
+            //   let filterDataset = allData.filter(d=>{
+            //     return (d.Country === "us"); 
+            //   })
+            //   update(filterDataset, true); 
+            // });
+            // d3.select("#All").on("click", event=>{
+            //   update(allData, true); 
+            // }); 
+            // d3.select("#US").on("click", event=>{
+            //   let filterDataset = allData.filter(d=>{
+            //     return (d.Country === "us"); 
+            //   })
+            //   update(filterDataset, true); 
+            // });
+            // d3.select("#GB").on("click", event=>{
+            //   let filterDataset = allData.filter(d=>{
+            //     return (d.Country === "gb"); 
+            //   })
+            //   update(filterDataset, true); 
+            // });
+            // d3.select("#DE").on("click", event=>{
+            //   let filterDataset = allData.filter(d=>{
+            //     return (d.Country === "de"); 
+            //   })
+            //   update(filterDataset, true); 
+            // });
+            // d3.select("#AU").on("click", event=>{
+            //   let filterDataset = allData.filter(d=>{
+            //     return (d.Country === "au"); 
+            //   })
+            //   update(filterDataset, true); 
+            // });
+            // d3.select("#CA").on("click", event=>{
+            //   let filterDataset = allData.filter(d=>{
+            //     return (d.Country === "ca"); 
+            //   })
+            //   update(filterDataset, true); 
+            // });
 
 
 
@@ -272,12 +319,6 @@
 
 
             //End Arielle's Code
-
-        }
-
-        loadCollegeMap()
-
-
     </script>
 </body>
 
