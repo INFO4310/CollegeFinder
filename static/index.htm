@@ -185,40 +185,44 @@
 
     <script>
         ////////////////////////////data manipulation/////////////////////////
-        // const data = await d3.csv('MERGED2018_19_PP.csv')
-
-        // var newData = data.map((d) => {
-        //     return {
-        //         name: d.INSTNM,
-        //         lat: d.LATITUDE,
-        //         lon: d.LONGITUDE,
-        //         tuition: d.COSTT4_A,
-        //         SAT: d.SAT_AVG,
-        //         ACT: d.ACTCMMID,
-        //         admissions: d.ADM_RATE,
-        //         size: d.UG
-        //     }
-        // })
-
-        //console.log(JSON.stringify(newData))
-
-        //////////////////////////////calling filtered data ////////////////////////
-
         const loadCollegeMap = async () => {
 
+            // const data = await d3.csv('MERGED2018_19_PP.csv');
+
+            // var newData = data.map((d) => {
+            //     return {
+            //         name: d.INSTNM,
+            //         lat: d.LATITUDE,
+            //         lon: d.LONGITUDE,
+            //         state: d.STABBR,
+            //         tuition: Number(d.COSTT4_A),
+            //         SAT: Number(d.SAT_AVG),
+            //         ACT: Number(d.ACTCMMID),
+            //         //admissions: d.ADM_RATE,
+            //         size: d.UGDS
+            //     };
+            // });
+
+
+            // // console.log(newData);
+            // console.log(JSON.stringify(newData))
+
+            //////////////////////////////calling filtered data ////////////////////////
+
             //load data
-            const AllData = await d3.json('filteredCollegeData.json')
+            const AllData = await d3.json('filteredCollegeData.json');
 
             //get states
-            var state = d3.select('#states').property("value")
+            var state = d3.select('#states').property("value");
             //TO DO: need to change this to a forEach loop
+            //TO DO: get state
             // newData = AllData.filter((d) => {
             //     return (d.state = state)
             // })
 
             //get tuition
             var tuition = d3.select('#tuition').property("value")
-            d3.select('#tuitionNumber').text("$"+formatNumber(tuition))
+            d3.select('#tuitionNumber').text("$" + formatNumber(tuition))
 
             //get sizes
             var sizes = [];
@@ -233,18 +237,21 @@
             var ACTVal = d3.select('#ACT_score_points').property("value")
             d3.select('#ACTNumber').text(ACTVal)
 
-            console.log(state, tuition, sizes)
+            console.log(state, tuition, sizes, SATVal, ACTVal)
 
             //call UpdateData
 
             UpdateData(AllData, state, tuition, sizes, SATVal, ACTVal)
-            updateTuitionLabel()
-            updateSATLabel()
-            updateACTLabel()
-
         }
 
         //helper functions!
+        function UpdateData(AllData) {
+            var newData = {};
+            console.log("updating data")
+
+
+            drawCircles(newData)
+        }
 
         //present number with comma
         function formatNumber(num) {
@@ -252,24 +259,9 @@
             return (format(num))
         }
 
-        function UpdateData(AllData) {
-            var newData = {};
-            console.log("updating data")
-        }
 
 
-        function updateTuitionLabel() {
-
-        }
-
-        function updateSATLabel() {
-
-        }
-        function updateACTLabel() {
-
-        }
-
-        function makeMap() {
+        function drawCircles() {
             //Jennifer's code
         }
             //update(allData, false);
