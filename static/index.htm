@@ -165,18 +165,20 @@
             </div>
             <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#collegeQuiz">
                 <div class="card-body">
-                    <input type="checkbox" id="SAT_score" name="SAT_score">
+                    <input type="checkbox" class="test-score" id="SAT_score" name="SAT_score" value="SAT"
+                        onchange=loadCollegeMap()>
                     <label for="SAT_score">SAT</label></br>
                     <label for="SAT_score_points">Score (between 0 and 1600):&nbsp</label><label for="SAT_score_points"
                         id="SATNumber">0</label></br>
-                    <input type="range" id="SAT_score_points" name="SAT_score_points" min="0" max="1600"
-                        onchange=loadCollegeMap()></br>
-                    <input type="checkbox" id="ACT_score" name="ACT_score">
+                    <input type="range" id="SAT_score_points" name="SAT_score_points" min="0" max="1600" value="0"
+                        onchange=updateSATLabel();loadCollegeMap()></br>
+                    <input type="checkbox" class="test-score" id="ACT_score" name="ACT_score" value="ACT"
+                        onchange=loadCollegeMap()>
                     <label for="ACT_score">ACT</label></br>
                     <label for="ACT_score_points">Score (between 0 and 36):&nbsp</label><label for="ACT_score_points"
                         id="ACTNumber">0</label></br>
-                    <input type="range" id="ACT_score_points" name="ACT_score_points" min="0" max="36"
-                        onchange=loadCollegeMap()></br>
+                    <input type="range" id="ACT_score_points" name="ACT_score_points" min="0" max="36" value="0"
+                        onchange=updateACTLabel;loadCollegeMap()></br>
                 </div>
             </div>
         </div>
@@ -232,10 +234,7 @@
             });
 
             //get test scores
-            var SATVal = d3.select('#SAT_score_points').property("value")
-            d3.select('#SATNumber').text(SATVal)
-            var ACTVal = d3.select('#ACT_score_points').property("value")
-            d3.select('#ACTNumber').text(ACTVal)
+            var SATVal, ACTVal = clickTestScore();
 
             console.log(state, tuition, sizes, SATVal, ACTVal)
 
@@ -260,7 +259,30 @@
         }
 
 
+        //choose Test Scoring Type
+        function clickTestScore() {
+            SATVal = null;
+            ACTVal = null;
 
+            var checkedTest = d3.selectAll('input.test-score:checked')._groups[0];
+            checkedTest.forEach((d) => {
+                if (d.value == "SAT") {
+                    var SATVal = d3.select('#SAT_score_points').property("value")
+                } else if (d.value == "ACT") {
+                    var ACTVal = d3.select('#ACT_score_points').property("value")
+                }
+            });
+            return (SATVal, ACTVal)
+        }
+        function updateSATLabel() {
+            var SATVal = d3.select('#SAT_score_points').property("value")
+            d3.select('#SATNumber').text(SATVal)
+        }
+
+        function updateACTLabel() {
+            var ACTVal = d3.select('#ACT_score_points').property("value")
+            d3.select('#ACTNumber').text(ACTVal)
+        }
         function drawCircles() {
             //Jennifer's code
         }
