@@ -178,7 +178,7 @@
                     <label for="ACT_score_points">Score (between 0 and 36):&nbsp</label><label for="ACT_score_points"
                         id="ACTNumber">0</label></br>
                     <input type="range" id="ACT_score_points" name="ACT_score_points" min="0" max="36" value="0"
-                        onchange=updateACTLabel;loadCollegeMap()></br>
+                        onchange=updateACTLabel();loadCollegeMap()></br>
                 </div>
             </div>
         </div>
@@ -281,8 +281,10 @@
 
         function updateACTLabel() {
             var ACTVal = d3.select('#ACT_score_points').property("value")
+            console.log(ACTVal)
             d3.select('#ACTNumber').text(ACTVal)
         }
+
         function drawCircles() {
             //Jennifer's code
         }
