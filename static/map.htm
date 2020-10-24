@@ -25,10 +25,20 @@
             var data = await d3.json('../static/filteredCollegeData.json');
 
             data = data.filter(d=> {
-                return d.name != "" && d.lat != "NULL" && d.lon != "NULL" 
+                return d.name != "" && d.lat != "NULL" && d.lon != "NULL" && d.location != [NaN, NaN] 
                 && d.tuition != "NULL" && d['SAT'] != "NULL" && d['ACT']!= "NULL"
                 && d.admissions != "NULL";
             });
+
+            data.forEach( (d, i) => {
+                d.location = [Number(d.lon), Number(d.lat)];
+                d['SAT']=Number(d['SAT']);
+                d['ACT']=Number(d['ACT']);
+                d.tuition = Number(d.tuition);
+                d.admissions = Number(d.admissions);
+            });
+
+            console.log(data);
 
             //topographic features
             var states = topojson.feature(us, us.objects.states);
@@ -56,22 +66,16 @@
                 .attr("fill", "lightgrey")
                 .attr("stroke", "white")
                 .attr("stroke-width", 1);
-
-            let idToState = {};
-            let collegePoint = [];
-
-            stateNames.forEach(row => {
-                idToState[row.id] = row.name;
-            });
-
-            data.forEach(row => {
-                let obj = {};
-                obj.name = row.name;
-                obj.location = [Number(row.lon), Number(row.lat)]
-                collegePoint.push(obj);
-            });
-
-            let infoWidth = 150;
+            
+            let circle = map.selectAll("circle").data(data)
+                .join("circle")
+                .attr("id", d=>d.name)
+                .attr("cx", d=> projection(d.location)[0])
+                .attr("cy", d=>projection(d.location)[1])
+                .attr("r", 5)
+                .attr("fill","red")
+            
+            let infoWidth = 120;
             let infoHeight = 40;
 
             let infoBox = mapsvg.append("g")
@@ -84,24 +88,47 @@
                 .attr("opacity", 0.9)
                 .attr("width",infoWidth)
                 .attr("height",infoHeight)
+
+            function wrap(text, width) {
+                    text.each(function () {
+                var text = d3.select(this),
+                    words = text.text().split(/\s+/).reverse(),
+                    word,
+                    line = [],
+                    lineNumber = 0,
+                    lineHeight = 1.1, // ems
+                    x = text.attr("x"),
+                    y = text.attr("y"),
+                    dy = 0, //parseFloat(text.attr("dy")),
+                    tspan = text.text(null)
+                        .append("tspan")
+                        .attr("x", x)
+                        .attr("y", y)
+                        .attr("dy", dy + "em");
+                    while (word = words.pop()) {
+                        line.push(word);
+                        tspan.text(line.join(" "));
+                            if (tspan.node().getComputedTextLength() > width) {
+                                line.pop();
+                                tspan.text(line.join(" "));
+                                line = [word];
+                        tspan = text.append("tspan")
+                            .attr("x", x)
+                            .attr("y", y)
+                            .attr("dy", ++lineNumber * lineHeight + dy + "em")
+                            .text(word);
+                    }}});
+            }
             infoBox.append("text")
                 .attr("class", "text")
-                .attr("id", "uniText")
+                .attr("id", "collegeName")
                 .attr("fill", "white")
-                .attr("text-anchor", "start")
-                .attr("alignment-baseline", "text-before-edge")
-                .attr("x", 4)
+                .attr("x", 8)
                 .attr("y", 4)
                 .attr("font-size", 12)
+                .attr("text-anchor", "start")
+                .attr("alignment-baseline", "text-before-edge")
                 .attr("font-weight", "bold");
-            
-            let circle = map.selectAll("circle").data(collegePoint)
-                .join("circle")
-                .attr("id", d=>d.name)
-                .attr("cx", d=>projection(d.location)[0])
-                .attr("cy", d=>projection(d.location)[1])
-                .attr("r", 5)
-                .attr("fill","red")
             
             circle.on("mouseover", function() {
                 let college = d3.select(this);
@@ -110,7 +137,7 @@
                 d3.select("#infoBox").attr("visibility", "visible")
                     .attr("transform", "translate(" + (coordinates[0]-10) + "," + (coordinates[1]) + ")");
 
-                d3.select("#uniText").text(college.datum().name);
+                d3.select("#collegeName").text(college.datum().name);
             })
         }
 
