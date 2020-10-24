@@ -1,0 +1,149 @@
+<html>
+
+<head>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://d3js.org/topojson.v2.min.js"></script>
+    <style>
+    </style>
+</head>
+
+<body>
+    <svg id="map" height="600" width="1000"></svg>
+    <script>
+        const mapsvg = d3.select("#map");
+        const width = mapsvg.attr("width");
+        const height = mapsvg.attr("height");
+        const margin = {top: 50, right: 50, bottom: 20, left:20};
+        const mapWidth = width - margin.left - margin.right;
+        const mapHeight = height - margin.top - margin.bottom;
+        const map = mapsvg.append("g")
+                  .attr("transform","translate("+margin.left+","+margin.top+")");
+
+        const loadCollegeMap = async () => {
+            var us = await d3.json("../static/us.json");
+            var stateNames = await d3.tsv("../static/us-state-names.tsv");
+            var data = await d3.json('../static/filteredCollegeData.json');
+
+            data = data.filter(d=> {
+                return d.name != "" && d.lat != "NULL" && d.lon != "NULL" && d.location != [NaN, NaN] 
+                && d.tuition != "NULL" && d['SAT'] != "NULL" && d['ACT']!= "NULL"
+                && d.admissions != "NULL";
+            });
+
+            data.forEach( (d, i) => {
+                d.location = [Number(d.lon), Number(d.lat)];
+                d['SAT']=Number(d['SAT']);
+                d['ACT']=Number(d['ACT']);
+                d.tuition = Number(d.tuition);
+                d.admissions = Number(d.admissions);
+            });
+
+            console.log(data);
+
+            //topographic features
+            var states = topojson.feature(us, us.objects.states);
+            var statesMesh = topojson.mesh(us, us.objects.states);
+            var projection = d3.geoAlbersUsa().fitSize([mapWidth, mapHeight], states);
+            var path = d3.geoPath().projection(projection);
+
+            //draw states and outlines
+            map.selectAll("path.state").data(states.features)
+                .join("path")
+                .attr("class", "state")
+                .attr("note", d => d.id)
+                .attr("d", path)
+                .attr("fill", "lightgrey")
+                .attr("stroke", "white")
+                .attr("stroke-width", 1);
+
+            var location = mapsvg.append("g")
+                .attr("class", "location")
+                .attr("fill", "lightgray");
+            
+            map.append("path").datum(statesMesh)
+                .attr("class","outline")
+                .attr("d", path)
+                .attr("fill", "lightgrey")
+                .attr("stroke", "white")
+                .attr("stroke-width", 1);
+            
+            let circle = map.selectAll("circle").data(data)
+                .join("circle")
+                .attr("id", d=>d.name)
+                .attr("cx", d=> projection(d.location)[0])
+                .attr("cy", d=>projection(d.location)[1])
+                .attr("r", 5)
+                .attr("fill","red")
+            
+            let infoWidth = 120;
+            let infoHeight = 40;
+
+            let infoBox = mapsvg.append("g")
+                .attr("id","infoBox")
+                .attr("visibility","hidden")
+                .attr("width", infoWidth)
+                .attr("height", infoHeight)
+            infoBox.append("rect")
+                .attr("fill", "black")
+                .attr("opacity", 0.9)
+                .attr("width",infoWidth)
+                .attr("height",infoHeight)
+
+            function wrap(text, width) {
+                    text.each(function () {
+                var text = d3.select(this),
+                    words = text.text().split(/\s+/).reverse(),
+                    word,
+                    line = [],
+                    lineNumber = 0,
+                    lineHeight = 1.1, // ems
+                    x = text.attr("x"),
+                    y = text.attr("y"),
+                    dy = 0, //parseFloat(text.attr("dy")),
+                    tspan = text.text(null)
+                        .append("tspan")
+                        .attr("x", x)
+                        .attr("y", y)
+                        .attr("dy", dy + "em");
+                    while (word = words.pop()) {
+                        line.push(word);
+                        tspan.text(line.join(" "));
+                            if (tspan.node().getComputedTextLength() > width) {
+                                line.pop();
+                                tspan.text(line.join(" "));
+                                line = [word];
+                        tspan = text.append("tspan")
+                            .attr("x", x)
+                            .attr("y", y)
+                            .attr("dy", ++lineNumber * lineHeight + dy + "em")
+                            .text(word);
+                    }}});
+            }
+            infoBox.append("text")
+                .attr("class", "text")
+                .attr("id", "collegeName")
+                .attr("fill", "white")
+                .attr("x", 8)
+                .attr("y", 4)
+                .attr("font-size", 12)
+                .attr("text-anchor", "start")
+                .attr("alignment-baseline", "text-before-edge")
+                .attr("font-weight", "bold");
+            
+            circle.on("mouseover", function() {
+                let college = d3.select(this);
+                var coordinates = d3.mouse(this);
+
+                d3.select("#infoBox").attr("visibility", "visible")
+                    .attr("transform", "translate(" + (coordinates[0]-10) + "," + (coordinates[1]) + ")");
+
+                d3.select("#collegeName").text(college.datum().name);
+            })
+        }
+
+        loadCollegeMap()
+
+    </script>
+</body>
+
+</html>
