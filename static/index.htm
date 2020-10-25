@@ -189,25 +189,38 @@
         ////////////////////////////data manipulation/////////////////////////
         const loadCollegeMap = async () => {
 
-            // const data = await d3.csv('MERGED2018_19_PP.csv');
+            const data = await d3.csv('MERGED2018_19_PP.csv');
 
-            // var newData = data.map((d) => {
-            //     return {
-            //         name: d.INSTNM,
-            //         lat: d.LATITUDE,
-            //         lon: d.LONGITUDE,
-            //         state: d.STABBR,
-            //         tuition: Number(d.COSTT4_A),
-            //         SAT: Number(d.SAT_AVG),
-            //         ACT: Number(d.ACTCMMID),
-            //         //admissions: d.ADM_RATE,
-            //         size: d.UGDS
-            //     };
-            // });
+            var newData = data.map((d) => {
+                return {
+                    name: d.INSTNM,
+                    lat: d.LATITUDE,
+                    lon: d.LONGITUDE,
+                    state: d.STABBR,
+                    tuition: d.COSTT4_A,
+                    SAT: d.SAT_AVG,
+                    ACT: d.ACTCMMID,
+                    //admissions: d.ADM_RATE,
+                    size: d.UGDS
+                };
+            });
+
+            newData = newData.filter(d=> {
+                return d.name != "" && d.lat != "NULL" && d.lon != "NULL" && d.location != [NaN, NaN] 
+                && d.tuition != "NULL" && d['SAT'] != "NULL" && d['ACT']!= "NULL";
+            });
+
+            newData.forEach( (d, i) => {
+                d.location = [Number(d.lon), Number(d.lat)];
+                d['SAT']=Number(d['SAT']);
+                d['ACT']=Number(d['ACT']);
+                d.tuition = Number(d.tuition);
+                // d.admissions = Number(d.admissions);
+            });
 
 
             // // console.log(newData);
-            // console.log(JSON.stringify(newData))
+            console.log(JSON.stringify(newData))
 
             //////////////////////////////calling filtered data ////////////////////////
 
@@ -288,53 +301,7 @@
         function drawCircles() {
             //Jennifer's code
         }
-            //update(allData, false);
-            // d3.select("#btn").on("click", event=>{
-            //   let filterDataset = allData.filter(d=>{
-            //     return (d.Country === "us"); 
-            //   })
-            //   update(filterDataset, true); 
-            // });
-            // d3.select("#All").on("click", event=>{
-            //   update(allData, true); 
-            // }); 
-            // d3.select("#US").on("click", event=>{
-            //   let filterDataset = allData.filter(d=>{
-            //     return (d.Country === "us"); 
-            //   })
-            //   update(filterDataset, true); 
-            // });
-            // d3.select("#GB").on("click", event=>{
-            //   let filterDataset = allData.filter(d=>{
-            //     return (d.Country === "gb"); 
-            //   })
-            //   update(filterDataset, true); 
-            // });
-            // d3.select("#DE").on("click", event=>{
-            //   let filterDataset = allData.filter(d=>{
-            //     return (d.Country === "de"); 
-            //   })
-            //   update(filterDataset, true); 
-            // });
-            // d3.select("#AU").on("click", event=>{
-            //   let filterDataset = allData.filter(d=>{
-            //     return (d.Country === "au"); 
-            //   })
-            //   update(filterDataset, true); 
-            // });
-            // d3.select("#CA").on("click", event=>{
-            //   let filterDataset = allData.filter(d=>{
-            //     return (d.Country === "ca"); 
-            //   })
-            //   update(filterDataset, true); 
-            // });
 
-
-
-
-
-
-            //End Arielle's Code
     </script>
 </body>
 
