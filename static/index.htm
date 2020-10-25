@@ -2,6 +2,7 @@
 
 <head>
     <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://d3js.org/topojson.v2.min.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
@@ -185,6 +186,9 @@
     </div>
     <!-- End card for Test Scores -->
 
+    <!-- Map SVG-->
+    <svg id="map" height="600" width="1000"></svg>
+
     <script>
         ////////////////////////////data manipulation/////////////////////////
         const loadCollegeMap = async () => {
@@ -210,15 +214,110 @@
             // console.log(JSON.stringify(newData))
 
             //////////////////////////////calling filtered data ////////////////////////
+            
+            //map attributes
+            const mapsvg = d3.select("#map");
+            const width = mapsvg.attr("width");
+            const height = mapsvg.attr("height");
+            const margin = {top: 50, right: 50, bottom: 20, left:20};
+            const mapWidth = width - margin.left - margin.right;
+            const mapHeight = height - margin.top - margin.bottom;
+            const map = mapsvg.append("g")
+                    .attr("transform","translate("+margin.left+","+margin.top+")");
 
             //load data
-            const AllData = await d3.json('filteredCollegeData.json');
+            var allData = await d3.json('filteredCollegeData.json');
+            var us = await d3.json("../static/us.json");
+
+            allData = allData.filter(d=> {
+                return d.name != "" && d.lat != "NULL" && d.lon != "NULL" && d.state != ""
+                && d.tuition != null && d['SAT'] != null && d['ACT']!= null && d.size != "NULL";
+            });
+
+            allData.forEach( (d, i) => {
+                d.lat = Number(d.lat);
+                d.lon = Number(d.lon);
+                d.location = [Number(d.lon), Number(d.lat)];
+                d['SAT']=Number(d['SAT']);
+                d['ACT']=Number(d['ACT']);
+                d.size = Number(d.size);
+            });
+
+            //topographic features
+            var states = topojson.feature(us, us.objects.states);
+            var statesMesh = topojson.mesh(us, us.objects.states);
+            var projection = d3.geoAlbersUsa().fitSize([mapWidth, mapHeight], states);
+            var path = d3.geoPath().projection(projection);
+
+            //draw states and outlines
+            map.selectAll("path.state").data(states.features)
+                .join("path")
+                .attr("class", "state")
+                .attr("note", d => d.id)
+                .attr("d", path)
+                .attr("fill", "lightgrey")
+                .attr("stroke", "white")
+                .attr("stroke-width", 1);
+
+            var location = mapsvg.append("g")
+                .attr("class", "location")
+                .attr("fill", "lightgray");
+            
+            map.append("path").datum(statesMesh)
+                .attr("class","outline")
+                .attr("d", path)
+                .attr("fill", "lightgrey")
+                .attr("stroke", "white")
+                .attr("stroke-width", 1);
+            
+            let circle = map.selectAll("circle").data(allData)
+                .join("circle")
+                .attr("id", d=>d.name)
+                .attr("cx", d=> projection(d.location)[0])
+                .attr("cy", d=>projection(d.location)[1])
+                .attr("r", 5)
+                .attr("fill","red")
+            
+            let infoWidth = 120;
+            let infoHeight = 40;
+
+            let infoBox = mapsvg.append("g")
+                .attr("id","infoBox")
+                .attr("visibility","hidden")
+                .attr("width", infoWidth)
+                .attr("height", infoHeight)
+            infoBox.append("rect")
+                .attr("fill", "black")
+                .attr("opacity", 0.9)
+                .attr("width",infoWidth)
+                .attr("height",infoHeight)
+            
+            infoBox.append("text")
+                .attr("class", "text")
+                .attr("id", "collegeName")
+                .attr("fill", "white")
+                .attr("x", 8)
+                .attr("y", 4)
+                .attr("font-size", 12)
+                .attr("text-anchor", "start")
+                .attr("alignment-baseline", "text-before-edge")
+                .attr("font-weight", "bold");
+
+            circle.on("mouseover", function() {
+                let college = d3.select(this);
+                var coordinates = d3.mouse(this);
+
+                d3.select("#infoBox").attr("visibility", "visible")
+                    .attr("transform", "translate(" + (coordinates[0]-10) + "," + (coordinates[1]) + ")");
+
+                d3.select("#collegeName").text(college.datum().name);
+            })
 
             //get states
             var state = d3.select('#states').property("value");
             //TO DO: need to change this to a forEach loop
             //TO DO: get state
-            // newData = AllData.filter((d) => {
+            // newData = allData.filter((d) => {
             //     return (d.state = state)
             // })
 
@@ -240,15 +339,16 @@
 
             //call UpdateData
 
-            UpdateData(AllData, state, tuition, sizes, SATVal, ACTVal)
+            UpdateData(allData, state, tuition, sizes, SATVal, ACTVal)
         }
 
+        loadCollegeMap();
+
         //helper functions!
-        function UpdateData(AllData) {
+        function UpdateData(allData) {
             var newData = {};
             console.log("updating data")
-
-
+            
             drawCircles(newData)
         }
 
