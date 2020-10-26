@@ -16,245 +16,298 @@
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
         crossorigin="anonymous"></script>
     <style>
-        .accordion {
-            width: 50%;
-            max-width: 500px;
+        body {
+            background-color: lightgray;
+            overflow-x: hidden;
+            margin: 0;
+        }
+        #collegeQuiz {
+            height: 100%;
+        }
+        #collegeQuiz .card-header {
+            border-bottom: 2px black solid;
+            margin: 0;
+        }
+        #collegeQuiz button[aria-expanded=true] {
+            color: red;
+            font-weight: bold;
+        }
+        #collegeQuiz h2 button{
+            color: #4f47f2;
+        }
+        #collegeQuiz .btn-link.focus, .btn-link:focus, .btn-link:hover{
+            text-decoration: none;
+        }
+        #header {
+            width: 100%;
+            height: auto;
+            background-color: #1c1c1c;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+        }
+        #header h1 {
+            padding-left: 10px;
+            margin: 0px;
+            color: white;
+            font-size: larger;
+            display: flex;
+            align-items: center;
+        }
+        #logo {
+            height: 40px;
+            margin: 0;
+            display: flex;
         }
     </style>
 </head>
 
 <body>
+    <div id='header'>
+    <div id='logo'>
+        <img id="logo" src="CollegeCompass.png" alt="CollegeCompassLogo"><h1>CollegeCompass: US College Finder</h1>
+    </div>
+    </div>
     <!-- more information can be found here: https://getbootstrap.com/docs/4.3/components/collapse/ -->
-    <div class="accordion" id="collegeQuiz">
+    <div class="row">
+        <div class="col">
+            <div class="accordion" id="collegeQuiz">
+                <!-- Start card for Location -->
+                <div class="card">
+                    <div class="card-header" id="headingOne">
+                        <h2 class="mb-0">
+                            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne"
+                                aria-expanded="true" aria-controls="collapseOne">
+                                Location
+                            </button>
+                        </h2>
+                    </div>
 
-        <!-- Start card for Location -->
-        <div class="card">
-            <div class="card-header" id="headingOne">
-                <h2 class="mb-0">
-                    <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne"
-                        aria-expanded="true" aria-controls="collapseOne">
-                        Location
-                    </button>
-                </h2>
-            </div>
+                    <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#collegeQuiz">
+                        <div class="card-body" id="location-card">
+                            <label for="states">Choose a state:</label>
 
-            <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#collegeQuiz">
-                <div class="card-body" id="location-card">
-                    <label for="states">Choose a state:</label>
+                            <!-- Arielle: needs to be changed for multiple states! -->
+                            <select name="states" id="states" onclick=loadCollegeMap()>
+                                <option value="all states">All States</option>
+                                <option value="alabama">Alabama</option>
+                                <option value="alaska">Alaska</option>
+                                <option value="arizona">Arizona</option>
+                                <option value="arkansas">Arkansas</option>
+                                <option value="california">California</option>
+                                <option value="colorado">Colorado</option>
+                                <option value="connecticut">Connecticut</option>
+                                <option value="delaware">Delaware</option>
+                                <option value="florida">Florida</option>
+                                <option value="georgia">Georgia</option>
+                                <option value="hawaii">Hawaii</option>
+                                <option value="idaho">Idaho</option>
+                                <option value="illinois">Illinois</option>
+                                <option value="indiana">Indiana</option>
+                                <option value="iowa">Iowa</option>
+                                <option value="kansas">Kansas</option>
+                                <option value="kentucky">Kentucky</option>
+                                <option value="louisiana">Louisiana</option>
+                                <option value="maine">Maine</option>
+                                <option value="maryland">Maryland</option>
+                                <option value="massachusetts">Massachusetts</option>
+                                <option value="michigan">Michigan</option>
+                                <option value="minnesota">Minnesota</option>
+                                <option value="mississippi">Mississippi</option>
+                                <option value="missouri">Missouri</option>
+                                <option value="montana">Montana</option>
+                                <option value="nebraska">Nebraska</option>
+                                <option value="hevada">Nevada</option>
+                                <option value="new hampshire">New Hamshire</option>
+                                <option value="new jersey">New Jersey</option>
+                                <option value="new mexico">New Mexico</option>
+                                <option value="new york">New York</option>
+                                <option value="north carolina">North Carolina</option>
+                                <option value="north dakota">North Dakota</option>
+                                <option value="ohio">Ohio</option>
+                                <option value="oklahoma">Oklahoma</option>
+                                <option value="oregon">Oregon</option>
+                                <option value="pennsylvania">Pennsylvania</option>
+                                <option value="rhode Island">Rhode Island</option>
+                                <option value="south Carolina">South Carolina</option>
+                                <option value="south Dakota">South Dakota</option>
+                                <option value="tennessee">Tennessee</option>
+                                <option value="texas">Texas</option>
+                                <option value="utah">Utah</option>
+                                <option value="vermont">Vermont</option>
+                                <option value="virginia">Virginia</option>
+                                <option value="washington">Washington</option>
+                                <option value="west virginia">West Virginia</option>
+                                <option value="wisconsin">Wisconsin</option>
+                                <option value="wyoming">Wyoming</option>
 
-                    <!-- Arielle: needs to be changed for multiple states! -->
-                    <select name="states" id="states" onclick=loadCollegeMap()>
-                        <option value="all states">All States</option>
-                        <option value="alabama">Alabama</option>
-                        <option value="alaska">Alaska</option>
-                        <option value="arizona">Arizona</option>
-                        <option value="arkansas">Arkansas</option>
-                        <option value="california">California</option>
-                        <option value="colorado">Colorado</option>
-                        <option value="connecticut">Connecticut</option>
-                        <option value="delaware">Delaware</option>
-                        <option value="florida">Florida</option>
-                        <option value="georgia">Georgia</option>
-                        <option value="hawaii">Hawaii</option>
-                        <option value="idaho">Idaho</option>
-                        <option value="illinois">Illinois</option>
-                        <option value="indiana">Indiana</option>
-                        <option value="iowa">Iowa</option>
-                        <option value="kansas">Kansas</option>
-                        <option value="kentucky">Kentucky</option>
-                        <option value="louisiana">Louisiana</option>
-                        <option value="maine">Maine</option>
-                        <option value="maryland">Maryland</option>
-                        <option value="massachusetts">Massachusetts</option>
-                        <option value="michigan">Michigan</option>
-                        <option value="minnesota">Minnesota</option>
-                        <option value="mississippi">Mississippi</option>
-                        <option value="missouri">Missouri</option>
-                        <option value="montana">Montana</option>
-                        <option value="nebraska">Nebraska</option>
-                        <option value="hevada">Nevada</option>
-                        <option value="new hampshire">New Hamshire</option>
-                        <option value="new jersey">New Jersey</option>
-                        <option value="new mexico">New Mexico</option>
-                        <option value="new york">New York</option>
-                        <option value="north carolina">North Carolina</option>
-                        <option value="north dakota">North Dakota</option>
-                        <option value="ohio">Ohio</option>
-                        <option value="oklahoma">Oklahoma</option>
-                        <option value="oregon">Oregon</option>
-                        <option value="pennsylvania">Pennsylvania</option>
-                        <option value="rhode Island">Rhode Island</option>
-                        <option value="south Carolina">South Carolina</option>
-                        <option value="south Dakota">South Dakota</option>
-                        <option value="tennessee">Tennessee</option>
-                        <option value="texas">Texas</option>
-                        <option value="utah">Utah</option>
-                        <option value="vermont">Vermont</option>
-                        <option value="virginia">Virginia</option>
-                        <option value="washington">Washington</option>
-                        <option value="west virginia">West Virginia</option>
-                        <option value="wisconsin">Wisconsin</option>
-                        <option value="wyoming">Wyoming</option>
+                            </select>
+                            <!-- <input type="checkbox"></input> -->
+                        </div>
+                    </div>
+                </div>
+                <!-- End card for Location -->
 
-                    </select>
-                    <!-- <input type="checkbox"></input> -->
+                <!-- Start card for Tuition -->
+                <div class="card">
+                    <div class="card-header" id="headingTwo">
+                        <h2 class="mb-0">
+                            <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
+                                data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                Tuition
+                            </button>
+                        </h2>
+                    </div>
+                    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#collegeQuiz">
+                        <div class="card-body">
+                            <label for="tuition">Tuition (between $7000 and $80000):&nbsp</label><label for="tuition"
+                                id="tuitionNumber">$80000</label></br>
+                            <input type="range" id="tuition" name="tuition" min="7000" max="80000" value="80000"
+                                list="tuitionHash" onclick=loadCollegeMap()></br>
+                            <datalist id="tuitionHash">
+                                <option value="7000" label="7000"></option>
+                                <!-- <option value="10"></option>
+                        <option value="20"></option>
+                        <option value="30"></option>
+                        <option value="40"></option> -->
+                                <option value="40000" label="40000"></option>
+                                <!-- <option value="60"></option>
+                        <option value="70"></option>
+                        <option value="80"></option>
+                        <option value="90"></option> -->
+                                <option value="80000" label="76000"></option>
+                            </datalist>
+
+                        </div>
+                    </div>
+                </div>
+                <!-- End card for Tuition -->
+
+                <!-- Start card for Size -->
+                <div class="card">
+                    <div class="card-header" id="headingThree">
+                        <h2 class="mb-0">
+                            <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
+                                data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                Size
+                            </button>
+                        </h2>
+                    </div>
+                    <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#collegeQuiz">
+                        <div class="card-body">
+                            <p>Choose a size:</p>
+                            <input type="checkbox" id="size1" class="size" name="size" value="100"
+                                onclick=loadCollegeMap()>
+                            <label for="size1">0 - 100 students</label><br>
+                            <input type="checkbox" id="size2" class="size" name="size" value="1000"
+                                onclick=loadCollegeMap()>
+                            <label for="size2">100 - 1,000 students</label><br>
+                            <input type="checkbox" id="size3" class="size" name="size" value="10000"
+                                onclick=loadCollegeMap()>
+                            <label for="size3">1,000 - 10,000 students</label><br>
+                            <input type="checkbox" id="size4" class="size" name="size" value="50000"
+                                onclick=loadCollegeMap()>
+                            <label for="size4">10,000 - 50,000 students</label><br>
+                            <input type="checkbox" id="size5" class="size" name="size" value="100000"
+                                onclick=loadCollegeMap()>
+                            <label for="size5">50,000 - 100,000 students</label><br>
+
+                            <br>
+                            <!-- <input type="submit" value="Submit"> -->
+                        </div>
+                    </div>
+                </div>
+                <!-- End card for Size -->
+
+                <!-- Start card for Test Scores -->
+                <div class="card">
+                    <div class="card-header" id="headingFour">
+                        <h2 class="mb-0">
+                            <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
+                                data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                                Test Scores
+                            </button>
+                        </h2>
+                    </div>
+                    <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#collegeQuiz">
+                        <div class="card-body">
+                            <input type="checkbox" class="test-score" id="SAT_score" name="SAT_score" value="SAT"
+                                onchange=loadCollegeMap()>
+                            <label for="SAT_score">SAT</label></br>
+                            <label for="SAT_score_points">Score (between 0 and 1600):&nbsp</label><label
+                                for="SAT_score_points" id="SATNumber">0</label></br>
+                            <input type="range" id="SAT_score_points" name="SAT_score_points" min="0" max="1600"
+                                value="0" onchange=updateSATLabel();loadCollegeMap()></br>
+                            <input type="checkbox" class="test-score" id="ACT_score" name="ACT_score" value="ACT"
+                                onchange=loadCollegeMap()>
+                            <label for="ACT_score">ACT</label></br>
+                            <label for="ACT_score_points">Score (between 0 and 36):&nbsp</label><label
+                                for="ACT_score_points" id="ACTNumber">0</label></br>
+                            <input type="range" id="ACT_score_points" name="ACT_score_points" min="0" max="36" value="0"
+                                onchange=updateACTLabel();loadCollegeMap()></br>
+                        </div>
+                    </div>
                 </div>
             </div>
+            <!-- End card for Test Scores -->
         </div>
-        <!-- End card for Location -->
-
-        <!-- Start card for Tuition -->
-        <div class="card">
-            <div class="card-header" id="headingTwo">
-                <h2 class="mb-0">
-                    <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
-                        data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                        Tuition
-                    </button>
-                </h2>
-            </div>
-            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#collegeQuiz">
-                <div class="card-body">
-                    <label for="tuition">Tuition (between $0 and $100,000):&nbsp</label><label for="tuition"
-                        id="tuitionNumber">$50,000</label></br>
-                    <input type="range" id="tuition" name="tuition" min="0" max="100000" onclick=loadCollegeMap()></br>
-                </div>
-            </div>
-        </div>
-        <!-- End card for Tuition -->
-
-        <!-- Start card for Size -->
-        <div class="card">
-            <div class="card-header" id="headingThree">
-                <h2 class="mb-0">
-                    <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
-                        data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                        Size
-                    </button>
-                </h2>
-            </div>
-            <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#collegeQuiz">
-                <div class="card-body">
-                    <p>Choose a size:</p>
-                    <input type="checkbox" id="size1" class="size" name="size" value="100" onclick=loadCollegeMap()>
-                    <label for="size1">0 - 100 students</label><br>
-                    <input type="checkbox" id="size2" class="size" name="size" value="1000" onclick=loadCollegeMap()>
-                    <label for="size2">100 - 1,000 students</label><br>
-                    <input type="checkbox" id="size3" class="size" name="size" value="10000" onclick=loadCollegeMap()>
-                    <label for="size3">1,000 - 10,000 students</label><br>
-                    <input type="checkbox" id="size4" class="size" name="size" value="50000" onclick=loadCollegeMap()>
-                    <label for="size4">10,000 - 50,000 students</label><br>
-                    <input type="checkbox" id="size5" class="size" name="size" value="100000" onclick=loadCollegeMap()>
-                    <label for="size5">50,000 - 100,000 students</label><br>
-
-                    <br>
-                    <!-- <input type="submit" value="Submit"> -->
-                </div>
-            </div>
-        </div>
-        <!-- End card for Size -->
-
-        <!-- Start card for Test Scores -->
-        <div class="card">
-            <div class="card-header" id="headingFour">
-                <h2 class="mb-0">
-                    <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
-                        data-target="#collapseFour" aria-expanded="true" aria-controls="collapseFour">
-                        Test Scores
-                    </button>
-                </h2>
-            </div>
-            <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#collegeQuiz">
-                <div class="card-body">
-                    <input type="checkbox" class="test-score" id="SAT_score" name="SAT_score" value="SAT"
-                        onchange=loadCollegeMap()>
-                    <label for="SAT_score">SAT</label></br>
-                    <label for="SAT_score_points">Score (between 0 and 1600):&nbsp</label><label for="SAT_score_points"
-                        id="SATNumber">0</label></br>
-                    <input type="range" id="SAT_score_points" name="SAT_score_points" min="0" max="1600" value="0"
-                        onchange=updateSATLabel();loadCollegeMap()></br>
-                    <input type="checkbox" class="test-score" id="ACT_score" name="ACT_score" value="ACT"
-                        onchange=loadCollegeMap()>
-                    <label for="ACT_score">ACT</label></br>
-                    <label for="ACT_score_points">Score (between 0 and 36):&nbsp</label><label for="ACT_score_points"
-                        id="ACTNumber">0</label></br>
-                    <input type="range" id="ACT_score_points" name="ACT_score_points" min="0" max="36" value="0"
-                        onchange=updateACTLabel();loadCollegeMap()></br>
-                </div>
-            </div>
+        <!-- Map SVG-->
+        <div class="col">
+            <svg id="map" width="800" height="500"></svg>
         </div>
     </div>
-    <!-- End card for Test Scores -->
-
-    <!-- Map SVG-->
-    <svg id="map" height="600" width="1000"></svg>
-
     <script>
+        //map attributes
+        const mapsvg = d3.select("#map");
+        const width = mapsvg.attr("width");
+        const height = mapsvg.attr("height");
+        const margin = { top: 50, right: 50, bottom: 20, left: 20 };
+        const mapWidth = width - margin.left - margin.right;
+        const mapHeight = height - margin.top - margin.bottom;
+        const map = mapsvg.append("g")
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+            .attr("id", "map");
         ////////////////////////////data manipulation/////////////////////////
-        const loadCollegeMap = async () => {
+        const drawMap = async () => {
 
-            const data = await d3.csv('MERGED2018_19_PP.csv');
+            //     const data = await d3.csv('MERGED2018_19_PP.csv');
 
-            var newData = data.map((d) => {
-                return {
-                    name: d.INSTNM,
-                    lat: d.LATITUDE,
-                    lon: d.LONGITUDE,
-                    state: d.STABBR,
-                    tuition: d.COSTT4_A,
-                    SAT: d.SAT_AVG,
-                    ACT: d.ACTCMMID,
-                    //admissions: d.ADM_RATE,
-                    size: d.UGDS
-                };
-            });
+            //     var newData = data.map((d) => {
+            //         return {
+            //             name: d.INSTNM,
+            //             lat: d.LATITUDE,
+            //             lon: d.LONGITUDE,
+            //             state: d.STABBR,
+            //             tuition: d.COSTT4_A,
+            //             SAT: d.SAT_AVG,
+            //             ACT: d.ACTCMMID,
+            //             //admissions: d.ADM_RATE,
+            //             size: d.UGDS
+            //         };
+            //     });
 
-            newData = newData.filter(d=> {
-                return d.name != "" && d.lat != "NULL" && d.lon != "NULL" && d.location != [NaN, NaN] 
-                && d.tuition != "NULL" && d['SAT'] != "NULL" && d['ACT']!= "NULL";
-            });
+            //     newData = newData.filter(d=> {
+            //         return d.name != "" && d.lat != "NULL" && d.lon != "NULL" && d.location != [NaN, NaN] 
+            //         && d.tuition != "NULL" && d['SAT'] != "NULL" && d['ACT']!= "NULL";
+            //     });
 
-            newData.forEach( (d, i) => {
-                d.location = [Number(d.lon), Number(d.lat)];
-                d['SAT']=Number(d['SAT']);
-                d['ACT']=Number(d['ACT']);
-                d.tuition = Number(d.tuition);
-                // d.admissions = Number(d.admissions);
-            });
+            //     newData.forEach( (d, i) => {
+            //         d.location = [Number(d.lon), Number(d.lat)];
+            //         d['SAT']=Number(d['SAT']);
+            //         d['ACT']=Number(d['ACT']);
+            //         d.tuition = Number(d.tuition);
+            //         // d.admissions = Number(d.admissions);
+            //     });
 
 
-            // // console.log(newData);
-            console.log(JSON.stringify(newData))
+            //     // // console.log(newData);
+            //     console.log(JSON.stringify(newData))
 
             //////////////////////////////calling filtered data ////////////////////////
-            
-            //map attributes
-            const mapsvg = d3.select("#map");
-            const width = mapsvg.attr("width");
-            const height = mapsvg.attr("height");
-            const margin = {top: 50, right: 50, bottom: 20, left:20};
-            const mapWidth = width - margin.left - margin.right;
-            const mapHeight = height - margin.top - margin.bottom;
-            const map = mapsvg.append("g")
-                    .attr("transform","translate("+margin.left+","+margin.top+")");
+
 
             //load data
-            var allData = await d3.json('filteredCollegeData.json');
             var us = await d3.json("../static/us.json");
-
-            allData = allData.filter(d=> {
-                return d.name != "" && d.lat != "NULL" && d.lon != "NULL" && d.state != ""
-                && d.tuition != null && d['SAT'] != null && d['ACT']!= null && d.size != "NULL";
-            });
-
-            allData.forEach( (d, i) => {
-                d.lat = Number(d.lat);
-                d.lon = Number(d.lon);
-                d.location = [Number(d.lon), Number(d.lat)];
-                d['SAT']=Number(d['SAT']);
-                d['ACT']=Number(d['ACT']);
-                d.size = Number(d.size);
-            });
 
             //topographic features
             var states = topojson.feature(us, us.objects.states);
@@ -268,43 +321,35 @@
                 .attr("class", "state")
                 .attr("note", d => d.id)
                 .attr("d", path)
-                .attr("fill", "lightgrey")
-                .attr("stroke", "white")
+                .attr("fill", "#1c1c1c")
+                .attr("stroke", "1c1c1c")
                 .attr("stroke-width", 1);
 
             var location = mapsvg.append("g")
                 .attr("class", "location")
                 .attr("fill", "lightgray");
-            
+
             map.append("path").datum(statesMesh)
-                .attr("class","outline")
+                .attr("class", "outline")
                 .attr("d", path)
-                .attr("fill", "lightgrey")
+                .attr("fill", "#1c1c1c")
                 .attr("stroke", "white")
                 .attr("stroke-width", 1);
-            
-            let circle = map.selectAll("circle").data(allData)
-                .join("circle")
-                .attr("id", d=>d.name)
-                .attr("cx", d=> projection(d.location)[0])
-                .attr("cy", d=>projection(d.location)[1])
-                .attr("r", 5)
-                .attr("fill","red")
-            
+
             let infoWidth = 120;
             let infoHeight = 40;
 
             let infoBox = mapsvg.append("g")
-                .attr("id","infoBox")
-                .attr("visibility","hidden")
+                .attr("id", "infoBox")
+                .attr("visibility", "hidden")
                 .attr("width", infoWidth)
                 .attr("height", infoHeight)
             infoBox.append("rect")
                 .attr("fill", "black")
                 .attr("opacity", 0.9)
-                .attr("width",infoWidth)
-                .attr("height",infoHeight)
-            
+                .attr("width", infoWidth)
+                .attr("height", infoHeight)
+
             infoBox.append("text")
                 .attr("class", "text")
                 .attr("id", "collegeName")
@@ -315,16 +360,23 @@
                 .attr("text-anchor", "start")
                 .attr("alignment-baseline", "text-before-edge")
                 .attr("font-weight", "bold");
+        }
+        drawMap()
+        //redraw map everytime input is changed
+        const loadCollegeMap = async () => {
 
-            circle.on("mouseover", function() {
-                let college = d3.select(this);
-                var coordinates = d3.mouse(this);
+            //get values for input slider: tuition
+            // fees = []
+            // allData.forEach((d,i) => {
+            //     fees.push(d.tuition)
+            // })
+            // console.log(fees)
+            // range = d3.extent(fees)
+            // console.log("minmax: " + range)
 
-                d3.select("#infoBox").attr("visibility", "visible")
-                    .attr("transform", "translate(" + (coordinates[0]-10) + "," + (coordinates[1]) + ")");
 
-                d3.select("#collegeName").text(college.datum().name);
-            })
+
+            var allData = await d3.json('filteredCollegeData.json');
 
             //get states
             var state = d3.select('#states').property("value");
@@ -334,7 +386,7 @@
             //     return (d.state = state)
             // })
 
-            //get tuition
+
             var tuition = d3.select('#tuition').property("value")
             d3.select('#tuitionNumber').text("$" + formatNumber(tuition))
 
@@ -351,17 +403,19 @@
             console.log(state, tuition, sizes, SATVal, ACTVal)
 
             //call UpdateData
-
             UpdateData(allData, state, tuition, sizes, SATVal, ACTVal)
         }
 
         loadCollegeMap();
 
         //helper functions!
-        function UpdateData(allData) {
-            var newData = {};
-            console.log("updating data")
-            
+        function UpdateData(allData, state, tuition, sizes, SATVal, ACTVal) {
+            var newData = allData.filter((d) => {
+                return (d.tuition <= tuition)
+            })
+
+            console.log("newData length: " + newData.length)
+
             drawCircles(newData)
         }
 
@@ -398,8 +452,31 @@
             d3.select('#ACTNumber').text(ACTVal)
         }
 
-        function drawCircles() {
-            //Jennifer's code
+        const drawCircles = async (newData) => {
+            var us = await d3.json("../static/us.json");
+            var states = topojson.feature(us, us.objects.states);
+
+            var projection = d3.geoAlbersUsa().fitSize([mapWidth, mapHeight], states);
+            let circle = map.selectAll("circle").data(newData)
+                .join("circle")
+                .attr("id", d => d.name)
+                .attr("cx", d => projection(d.location)[0])
+                .attr("cy", d => projection(d.location)[1])
+                .attr("r", 4)
+                .attr("fill", "#9b3080")
+                .style("opacity", .7)
+
+            circle.on("mouseover", function () {
+                let college = d3.select(this);
+                var coordinates = d3.mouse(this);
+
+                d3.select("#infoBox").attr("visibility", "visible")
+                    .attr("transform", "translate(" + (coordinates[0] - 10) + "," + (coordinates[1]) + ")");
+
+                d3.select("#collegeName").text(college.datum().name);
+            })
+
+            //TO DO: mouse on, mouse out functionalities
         }
 
     </script>
