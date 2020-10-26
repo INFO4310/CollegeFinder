@@ -339,8 +339,8 @@
                 .attr("stroke", "white")
                 .attr("stroke-width", 1);
 
-            let infoWidth = 120;
-            let infoHeight = 40;
+            let infoWidth = 150;
+            let infoHeight = 50;
 
             let infoBox = mapsvg.append("g")
                 .attr("id", "infoBox")
@@ -358,7 +358,7 @@
                 .attr("id", "collegeName")
                 .attr("fill", "white")
                 .attr("x", 8)
-                .attr("y", 4)
+                .attr("y", 16)
                 .attr("font-size", 12)
                 .attr("text-anchor", "start")
                 .attr("alignment-baseline", "text-before-edge")
@@ -458,8 +458,8 @@
         const drawCircles = async (newData) => {
             var us = await d3.json("../static/us.json");
             var states = topojson.feature(us, us.objects.states);
-
             var projection = d3.geoAlbersUsa().fitSize([mapWidth, mapHeight], states);
+
             let circle = map.selectAll("circle").data(newData)
                 .join("circle")
                 .attr("id", d => d.name)
@@ -467,19 +467,59 @@
                 .attr("cy", d => projection(d.location)[1])
                 .attr("r", 4)
                 .attr("fill", "#9b3080")
-                .style("opacity", .7)
+                .style("opacity", .7);
+
+            //modified Mike Bostock's code for wrapping long labels: https://bl.ocks.org/mbostock/7555321
+            function wrap(text, width) {
+                text.each(function () {
+                var text = d3.select(this),
+                words = text.text().split(/\s+/).reverse(), word, line = [],
+                lineNumber = 0, lineHeight = 1.1, 
+                x = text.attr("x"), y = text.attr("y"),
+                dy = 0, 
+                tspan = text.text(null)
+                            .append("tspan")
+                            .attr("x", x)
+                            .attr("y", y)
+                            .attr("dy", dy + "em");
+                while (word = words.pop()) {
+                    line.push(word);
+                    tspan.text(line.join(" "));
+                    if (tspan.node().getComputedTextLength() > width) {
+                        line.pop();
+                        tspan.text(line.join(" "));
+                        line = [word];
+                        tspan = text.append("tspan")
+                                    .attr("x", x)
+                                    .attr("y", y)
+                                    .attr("dy", ++lineNumber * lineHeight + dy + "em")
+                                    .text(word);
+                    }
+                }
+            });}
 
             circle.on("mouseover", function () {
                 let college = d3.select(this);
                 var coordinates = d3.mouse(this);
 
+                college.transition().duration(200);
+
                 d3.select("#infoBox").attr("visibility", "visible")
                     .attr("transform", "translate(" + (coordinates[0] - 10) + "," + (coordinates[1]) + ")");
 
-                d3.select("#collegeName").text(college.datum().name);
+                d3.select("#collegeName").text(college.datum().name)
+                    .call(wrap, 140);
             })
+            
+            circle.on("mouseout", function () {
+                let college = d3.select(this);
+                var coordinates = d3.mouse(this);
 
-            //TO DO: mouse on, mouse out functionalities
+                college.transition().duration(200);
+
+                d3.select("#infoBox").attr("visibility", "hidden");
+                d3.select("#collegeName").text("");
+        })
         }
 
     </script>
