@@ -104,7 +104,7 @@
     </div>
     <!-- more information can be found here: https://getbootstrap.com/docs/4.3/components/collapse/ -->
     <div class="row">
-        <div class="col col-md-4 col-sm-12" >
+        <div class="col col-md-4 col-sm-12">
             <div class="accordion" id="collegeQuiz">
                 <!-- Start card for Location -->
                 <div class="card">
@@ -189,7 +189,8 @@
                     <div class="card-header" id="headingTwo">
                         <h2 class="mb-0">
                             <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
-                                data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" id="tuition-btn">
+                                data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo"
+                                id="tuition-btn">
                                 Tuition
                             </button>
                         </h2>
@@ -210,7 +211,8 @@
                     <div class="card-header" id="headingThree">
                         <h2 class="mb-0">
                             <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
-                                data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree" id="size-btn">
+                                data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree"
+                                id="size-btn">
                                 Size
                             </button>
                         </h2>
@@ -246,7 +248,8 @@
                     <div class="card-header" id="headingFour">
                         <h2 class="mb-0">
                             <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
-                                data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour" id="test-btn">
+                                data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour"
+                                id="test-btn">
                                 Test Scores
                             </button>
                         </h2>
@@ -279,6 +282,8 @@
         </div>
     </div>
     <script>
+        ////////////////////////////ESTABLISHING GLOBALLY USED VARIABLEs/////////////////////////
+
         //map attributes
         const mapsvg = d3.select("#map");
         const width = mapsvg.attr("width");
@@ -289,46 +294,51 @@
         const map = mapsvg.append("g")
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
             .attr("id", "map");
-        ////////////////////////////data manipulation/////////////////////////
+
+        ////////////////////////////initial data manipulation/////////////////////////
+        //     const data = await d3.csv('MERGED2018_19_PP.csv');
+
+        //     var newData = data.map((d) => {
+        //         return {
+        //             name: d.INSTNM,
+        //             lat: d.LATITUDE,
+        //             lon: d.LONGITUDE,
+        //             state: d.STABBR,
+        //             tuition: d.COSTT4_A,
+        //             SAT: d.SAT_AVG,
+        //             ACT: d.ACTCMMID,
+        //             //admissions: d.ADM_RATE,
+        //             size: d.UGDS
+        //         };
+        //     });
+
+        //     newData = newData.filter(d=> {
+        //         return d.name != "" && d.lat != "NULL" && d.lon != "NULL" && d.location != [NaN, NaN] 
+        //         && d.tuition != "NULL" && d['SAT'] != "NULL" && d['ACT']!= "NULL";
+        //     });
+
+        //     newData.forEach( (d, i) => {
+        //         d.location = [Number(d.lon), Number(d.lat)];
+        //         d['SAT']=Number(d['SAT']);
+        //         d['ACT']=Number(d['ACT']);
+        //         d.tuition = Number(d.tuition);
+        //         // d.admissions = Number(d.admissions);
+        //     });
+
+        //get values for input slider: tuition
+        // fees = []
+        // allData.forEach((d,i) => {
+        //     fees.push(d.tuition)
+        // })
+        // console.log(fees)
+        // range = d3.extent(fees)
+        // console.log("minmax: " + range)
+        //     // // console.log(newData);
+        //     console.log(JSON.stringify(newData))
+
+        //////////////////////////////DRAW MAP BACKGROUND///////////////////////////////
+        //load data
         const drawMap = async () => {
-
-            //     const data = await d3.csv('MERGED2018_19_PP.csv');
-
-            //     var newData = data.map((d) => {
-            //         return {
-            //             name: d.INSTNM,
-            //             lat: d.LATITUDE,
-            //             lon: d.LONGITUDE,
-            //             state: d.STABBR,
-            //             tuition: d.COSTT4_A,
-            //             SAT: d.SAT_AVG,
-            //             ACT: d.ACTCMMID,
-            //             //admissions: d.ADM_RATE,
-            //             size: d.UGDS
-            //         };
-            //     });
-
-            //     newData = newData.filter(d=> {
-            //         return d.name != "" && d.lat != "NULL" && d.lon != "NULL" && d.location != [NaN, NaN] 
-            //         && d.tuition != "NULL" && d['SAT'] != "NULL" && d['ACT']!= "NULL";
-            //     });
-
-            //     newData.forEach( (d, i) => {
-            //         d.location = [Number(d.lon), Number(d.lat)];
-            //         d['SAT']=Number(d['SAT']);
-            //         d['ACT']=Number(d['ACT']);
-            //         d.tuition = Number(d.tuition);
-            //         // d.admissions = Number(d.admissions);
-            //     });
-
-
-            //     // // console.log(newData);
-            //     console.log(JSON.stringify(newData))
-
-            //////////////////////////////calling filtered data ////////////////////////
-
-
-            //load data
             var us = await d3.json("../static/us.json");
 
             //topographic features
@@ -384,20 +394,10 @@
                 .attr("font-weight", "bold");
         }
         drawMap()
-        //redraw map everytime input is changed
+
+
+        ////////////////////////////////////GET ALL INPUT VALUES AND CALL HELPER FUNCTIONS/////////////////////////////////////
         const loadCollegeMap = async () => {
-
-            //get values for input slider: tuition
-            // fees = []
-            // allData.forEach((d,i) => {
-            //     fees.push(d.tuition)
-            // })
-            // console.log(fees)
-            // range = d3.extent(fees)
-            // console.log("minmax: " + range)
-
-
-
             var allData = await d3.json('filteredCollegeData.json');
 
             //get states
@@ -459,7 +459,8 @@
 
         loadCollegeMap();
 
-        //helper functions!
+        ////////////////////////////////////FILTER ALL DATA GIVEN INPUTS/////////////////////////////////////
+        //filter data given all inputs
         function UpdateData(allData, states, tuition, sizes, SATVal, ACTVal) {
             var newData = allData.filter((d) => {
                 return (d.tuition <= tuition &&
@@ -473,17 +474,17 @@
             newData = sizedData.flat();
 
             if (SATVal != null && ACTVal != null) {
-                d3.select('#test-btn').text("Test Scores: SAT("+SATVal+"), ACT("+ACTVal+")")
+                d3.select('#test-btn').text("Test Scores: SAT(" + SATVal + "), ACT(" + ACTVal + ")")
                 var newData = newData.filter((d) => {
                     return (d.SAT <= SATVal || d.ACT <= ACTVal)
                 })
             } else if (SATVal != null && ACTVal == null) {
-                d3.select('#test-btn').text("Test Scores: SAT("+SATVal+")")
+                d3.select('#test-btn').text("Test Scores: SAT(" + SATVal + ")")
                 var newData = newData.filter((d) => {
                     return (d.SAT <= SATVal)
                 })
             } else if (SATVal == null && ACTVal != null) {
-                d3.select('#test-btn').text("Test Scores: ACT("+ACTVal+")")
+                d3.select('#test-btn').text("Test Scores: ACT(" + ACTVal + ")")
                 var newData = newData.filter((d) => {
                     return (d.ACT <= ACTVal)
                 })
@@ -492,60 +493,7 @@
             drawCircles(newData)
         }
 
-        //present number with comma
-        function formatNumber(num) {
-            format = d3.format(",");
-            return (format(num))
-        }
-
-        //choose Test Scoring Type
-        function clickTestScore() {
-            var SATVal = null;
-            var ACTVal = null;
-
-            var checkedTest = d3.selectAll('input.test-score:checked')._groups[0];
-            checkedTest.forEach((d) => {
-                console.log("should be either SAT or ACT " + d.value)
-                if (d.value == "SAT") {
-                    SATVal = Number(d3.select('#SAT_score_points').property("value"))
-                } else if (d.value == "ACT") {
-                    ACTVal = Number(d3.select('#ACT_score_points').property("value"))
-                }
-            });
-            return [SATVal, ACTVal]
-        }
-
-        function updateSATLabel() {
-            var SATVal = d3.select('#SAT_score_points').property("value")
-            d3.select('#SATNumber').text(SATVal)
-        }
-
-        function updateACTLabel() {
-            var ACTVal = d3.select('#ACT_score_points').property("value")
-            d3.select('#ACTNumber').text(ACTVal)
-        }
-
-        function enableSAT() {
-            SATcheck = d3.select("input#SAT_score")._groups[0][0];
-            SATslider = d3.select("input#SAT_score_points")
-            if (SATcheck.checked) {
-                SATslider.attr('disabled', null)
-            } else {
-                SATslider.attr('disabled', true)
-            }
-        }
-
-        function enableACT() {
-            ACTcheck = d3.select("input#ACT_score")._groups[0][0];
-            ACTslider = d3.select("input#ACT_score_points")
-            if (ACTcheck.checked) {
-                ACTslider.attr('disabled', null)
-            } else {
-                ACTslider.attr('disabled', true)
-            }
-        }
-
-
+        ////////////////////////////////////REDRAW CIRCLES WITH NEW FILTERED DATA/////////////////////////////////////
         const drawCircles = async (newData) => {
             var us = await d3.json("../static/us.json");
             var states = topojson.feature(us, us.objects.states);
@@ -600,7 +548,7 @@
                     .attr("transform", "translate(" + (coordinates[0] - 10) + "," + (coordinates[1]) + ")");
 
                 d3.select("#collegeName").text(college.datum().name)
-                    .call(wrap, 140);
+                    .call(wrap, 100);
             })
 
             circle.on("mouseout", function () {
@@ -612,6 +560,68 @@
                 d3.select("#infoBox").attr("visibility", "hidden");
                 d3.select("#collegeName").text("");
             })
+        }
+
+        ////////////////////////////////////HELPER FUNCTIONS/////////////////////////////////////
+        //present number with comma
+        function formatNumber(num) {
+            format = d3.format(",");
+            return (format(num))
+        }
+
+        //choose Test Scoring Type
+        function clickTestScore() {
+            var SATVal = null;
+            var ACTVal = null;
+
+            var checkedTest = d3.selectAll('input.test-score:checked')._groups[0];
+            checkedTest.forEach((d) => {
+                console.log("should be either SAT or ACT " + d.value)
+                if (d.value == "SAT") {
+                    SATVal = Number(d3.select('#SAT_score_points').property("value"))
+                } else if (d.value == "ACT") {
+                    ACTVal = Number(d3.select('#ACT_score_points').property("value"))
+                }
+            });
+            return [SATVal, ACTVal]
+        }
+
+        function updateSATLabel() {
+            var SATVal = d3.select('#SAT_score_points').property("value")
+            d3.select('#SATNumber').text(SATVal)
+        }
+
+        function updateACTLabel() {
+            var ACTVal = d3.select('#ACT_score_points').property("value")
+            d3.select('#ACTNumber').text(ACTVal)
+        }
+
+        function enableSAT() {
+            SATcheck = d3.select("input#SAT_score")._groups[0][0];
+            ACTcheck = d3.select("input#ACT_score")._groups[0][0];
+            SATslider = d3.select("input#SAT_score_points")
+            if (SATcheck.checked) {
+                SATslider.attr('disabled', null)
+            } else if (!SATcheck.checked && ACTcheck.checked) {
+                SATslider.attr('disabled', true)
+            } else if (!SATcheck.checked && !ACTcheck.checked) {
+                SATcheck.checked = true;
+                SATslider.attr('disabled', null)
+            }
+        }
+
+        function enableACT() {
+            ACTcheck = d3.select("input#ACT_score")._groups[0][0];
+            SATcheck = d3.select("input#SAT_score")._groups[0][0];
+            ACTslider = d3.select("input#ACT_score_points")
+            if (ACTcheck.checked) {
+                ACTslider.attr('disabled', null)
+            } else if (!ACTcheck.checked && SATcheck.checked) {
+                ACTslider.attr('disabled', true)
+            } else if (!ACTcheck.checked && !SATcheck.checked) {
+                ACTcheck.checked = true;
+                ACTslider.attr('disabled', null)
+            }
         }
 
     </script>
