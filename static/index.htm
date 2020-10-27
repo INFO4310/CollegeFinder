@@ -253,14 +253,14 @@
                     <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#collegeQuiz">
                         <div class="card-body">
                             <input type="checkbox" class="test-score" id="SAT_score" name="SAT_score" value="SAT"
-                                onchange=enableSAT() checked>
+                                onchange=enableSAT();loadCollegeMap() checked>
                             <label for="SAT_score">SAT</label></br>
                             <label for="SAT_score_points">Score (between 0 and 1600):&nbsp</label><label
                                 for="SAT_score_points" id="SATNumber">1600</label></br>
                             <input type="number" id="SAT_score_points" name="SAT_score_points" min="0" max="1600"
                                 value="1600" onchange=updateSATLabel();loadCollegeMap()></br>
                             <input type="checkbox" class="test-score" id="ACT_score" name="ACT_score" value="ACT"
-                                onchange=enableACT() checked>
+                                onchange=enableACT();loadCollegeMap() checked>
                             <label for="ACT_score">ACT</label></br>
                             <label for="ACT_score_points">Score (between 0 and 36):&nbsp</label><label
                                 for="ACT_score_points" id="ACTNumber">36</label></br>
@@ -410,7 +410,6 @@
                 states.add(d.value)
             })
 
-            console.log(states)
             //get tuition
             var tuition = d3.select('#tuition').property("value")
             d3.select('#tuitionNumber').text("$" + formatNumber(tuition))
@@ -449,30 +448,26 @@
                 return (d.tuition <= tuition &&
                 states.has(d.state))
             })
-            console.log("new data" + newData)
             sizedData = [];
             sizes.forEach((d) => {
-              let filtered = newData.filter(e => {return console.log(e + " d[0]: " + d[0] + " d[1]: " + d[1]), e.size >= d[0] && e.size <= d[1] });
+              let filtered = newData.filter(e => {return e.size >= d[0] && e.size <= d[1] });
                 sizedData.push(filtered)
             })
             newData = sizedData.flat();
-            console.log(newData)
 
-            if (SATVal != null) {
+            if (SATVal != null && ACTVal != null) {
+                var newData = newData.filter((d) => {
+                    return (d.SAT <= SATVal || d.ACT <= ACTVal)
+                })
+            } else if (SATVal != null && ACTVal == null ) {
                 var newData = newData.filter((d) => {
                     return (d.SAT <= SATVal)
                 })
-                return (newData)
-            }
-
-            if (ACTVal != null) {
+            } else if (SATVal == null && ACTVal != null ){
                 var newData = newData.filter((d) => {
                     return (d.ACT <= ACTVal)
                 })
-                return (newData)
             }
-
-            console.log("newData length: " + newData.length)
 
             drawCircles(newData)
         }
@@ -485,12 +480,16 @@
 
         //choose Test Scoring Type
         function clickTestScore() {
+            var SATVal = null;
+            var ACTVal = null;
+
             var checkedTest = d3.selectAll('input.test-score:checked')._groups[0];
             checkedTest.forEach((d) => {
+                console.log("should be either SAT or ACT " + d.value)
                 if (d.value == "SAT") {
-                    var SATVal = d3.select('#SAT_score_points').property("value")
+                    SATVal = Number(d3.select('#SAT_score_points').property("value"))
                 } else if (d.value == "ACT") {
-                    var ACTVal = d3.select('#ACT_score_points').property("value")
+                    ACTVal = Number(d3.select('#ACT_score_points').property("value"))
                 }
             });
             return [SATVal, ACTVal]
@@ -503,16 +502,27 @@
 
         function updateACTLabel() {
             var ACTVal = d3.select('#ACT_score_points').property("value")
-            console.log(ACTVal)
             d3.select('#ACTNumber').text(ACTVal)
         }
 
         function enableSAT() {
-            //To do
+            SATcheck = d3.select("input#SAT_score")._groups[0][0];
+            SATslider = d3.select("input#SAT_score_points")
+            if (SATcheck.checked) {
+                SATslider.attr('disabled', null)
+            } else {
+                SATslider.attr('disabled', true)
+            }
         }
 
         function enableACT() {
-            //To do
+            ACTcheck = d3.select("input#ACT_score")._groups[0][0];
+            ACTslider = d3.select("input#ACT_score_points")
+            if (ACTcheck.checked) {
+                ACTslider.attr('disabled', null)
+            } else {
+                ACTslider.attr('disabled', true)
+            }
         }
 
 
