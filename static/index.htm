@@ -46,6 +46,7 @@
 
         #collegeQuiz h2 button {
             color: #4f47f2;
+            text-align: left;
         }
 
         #collegeQuiz .btn-link.focus,
@@ -110,7 +111,7 @@
                     <div class="card-header" id="headingOne">
                         <h2 class="mb-0">
                             <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne"
-                                aria-expanded="true" aria-controls="collapseOne">
+                                aria-expanded="true" aria-controls="collapseOne" id="location-btn">
                                 Location
                             </button>
                         </h2>
@@ -188,7 +189,7 @@
                     <div class="card-header" id="headingTwo">
                         <h2 class="mb-0">
                             <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
-                                data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" id="tuition-btn">
                                 Tuition
                             </button>
                         </h2>
@@ -209,7 +210,7 @@
                     <div class="card-header" id="headingThree">
                         <h2 class="mb-0">
                             <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
-                                data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree" id="size-btn">
                                 Size
                             </button>
                         </h2>
@@ -245,7 +246,7 @@
                     <div class="card-header" id="headingFour">
                         <h2 class="mb-0">
                             <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
-                                data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                                data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour" id="test-btn">
                                 Test Scores
                             </button>
                         </h2>
@@ -401,6 +402,7 @@
 
             //get states
             let states = new Set()
+            let statesArr = [];
             var selectedStates = d3.select('#states')
                 .selectAll("option")
                 .filter(function (d, i) {
@@ -408,28 +410,43 @@
                 });
             selectedStates._groups[0].forEach((d, i) => {
                 states.add(d.value)
+                statesArr.push(" " + d.text)
             })
+            if (statesArr.length >= 20) {
+                d3.select("#location-btn").text("Location: 20+ States")
+            } else {
+                d3.select("#location-btn").text("Location: " + statesArr)
+            }
 
             //get tuition
             var tuition = d3.select('#tuition').property("value")
             d3.select('#tuitionNumber').text("$" + formatNumber(tuition))
+            d3.select("#tuition-btn").text("Tuition: $" + formatNumber(tuition))
 
             //get sizes
             var sizes = [];
+            var sizeLbl = [];
             var checkedSize = d3.selectAll("input.size:checked")._groups[0];
             checkedSize.forEach((d) => {
                 if (Number(d.value) == 100) {
                     sizes.push([0, 100])
+                    sizeLbl.push("0-100")
                 } else if (Number(d.value) == 1000) {
                     sizes.push([100, 1000])
+                    sizeLbl.push("100-1000")
                 } else if (Number(d.value) == 10000) {
                     sizes.push([1000, 10000])
+                    sizeLbl.push("1000-1000")
                 } else if (Number(d.value) == 50000) {
                     sizes.push([10000, 50000])
+                    sizeLbl.push("10000-50000")
                 } else if (Number(d.value) == 100000) {
                     sizes.push([50000, 100000])
+                    sizeLbl.push("50000-100000")
                 }
             });
+
+            d3.select('#size-btn').text("Number of Students: " + sizeLbl.join(', '))
 
             //get test scores
             var [SATVal, ACTVal] = clickTestScore();
@@ -446,24 +463,27 @@
         function UpdateData(allData, states, tuition, sizes, SATVal, ACTVal) {
             var newData = allData.filter((d) => {
                 return (d.tuition <= tuition &&
-                states.has(d.state))
+                    states.has(d.state))
             })
             sizedData = [];
             sizes.forEach((d) => {
-              let filtered = newData.filter(e => {return e.size >= d[0] && e.size <= d[1] });
+                let filtered = newData.filter(e => { return e.size >= d[0] && e.size <= d[1] });
                 sizedData.push(filtered)
             })
             newData = sizedData.flat();
 
             if (SATVal != null && ACTVal != null) {
+                d3.select('#test-btn').text("Test Scores: SAT("+SATVal+"), ACT("+ACTVal+")")
                 var newData = newData.filter((d) => {
                     return (d.SAT <= SATVal || d.ACT <= ACTVal)
                 })
-            } else if (SATVal != null && ACTVal == null ) {
+            } else if (SATVal != null && ACTVal == null) {
+                d3.select('#test-btn').text("Test Scores: SAT("+SATVal+")")
                 var newData = newData.filter((d) => {
                     return (d.SAT <= SATVal)
                 })
-            } else if (SATVal == null && ACTVal != null ){
+            } else if (SATVal == null && ACTVal != null) {
+                d3.select('#test-btn').text("Test Scores: ACT("+ACTVal+")")
                 var newData = newData.filter((d) => {
                     return (d.ACT <= ACTVal)
                 })
