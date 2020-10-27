@@ -401,6 +401,16 @@
 
             //get states
             var state = d3.select('#states').property("value");
+
+            var states = [];
+            $('#states').on('change', function() {
+                var values = $(this).val();
+                states = values; 
+                console.log(values);
+                console.log(states); 
+
+            });
+
             //TO DO: need to change this to a forEach loop
             //TO DO: get state
             // newData = allData.filter((d) => {
