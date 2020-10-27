@@ -123,57 +123,57 @@
                                 <label for="states">Choose a state:</label></br>
 
                                 <select name="states" id="states" data-size="4" class="selectpicker"
-                                    data-actions-box="true" data-live-search="true" onclick=loadCollegeMap() multiple>
-                                    <option value="AL">Alabama</option>
-                                    <option value="AK">Alaska</option>
-                                    <option value="AZ">Arizona</option>
-                                    <option value="AR">Arkansas</option>
-                                    <option value="CA">California</option>
-                                    <option value="CO">Colorado</option>
-                                    <option value="CT">Connecticut</option>
-                                    <option value="DE">Delaware</option>
-                                    <option value="FL">Florida</option>
-                                    <option value="GA">Georgia</option>
-                                    <option value="HI">Hawaii</option>
-                                    <option value="ID">Idaho</option>
-                                    <option value="IL">Illinois</option>
-                                    <option value="IN">Indiana</option>
-                                    <option value="IA">Iowa</option>
-                                    <option value="KS">Kansas</option>
-                                    <option value="KY">Kentucky</option>
-                                    <option value="LA">Louisiana</option>
-                                    <option value="ME">Maine</option>
-                                    <option value="MD">Maryland</option>
-                                    <option value="MA">Massachusetts</option>
-                                    <option value="MI">Michigan</option>
-                                    <option value="MN">Minnesota</option>
-                                    <option value="MS">Mississippi</option>
-                                    <option value="MO">Missouri</option>
-                                    <option value="MT">Montana</option>
-                                    <option value="NE">Nebraska</option>
-                                    <option value="NV">Nevada</option>
-                                    <option value="NH">New Hamshire</option>
-                                    <option value="NJ">New Jersey</option>
-                                    <option value="NM">New Mexico</option>
-                                    <option value="NY">New York</option>
-                                    <option value="NC">North Carolina</option>
-                                    <option value="ND">North Dakota</option>
-                                    <option value="OH">Ohio</option>
-                                    <option value="OK">Oklahoma</option>
-                                    <option value="OR">Oregon</option>
-                                    <option value="PA">Pennsylvania</option>
-                                    <option value="RI">Rhode Island</option>
-                                    <option value="SC">South Carolina</option>
-                                    <option value="SD">South Dakota</option>
-                                    <option value="TN">Tennessee</option>
-                                    <option value="TX">Texas</option>
-                                    <option value="UT">Utah</option>
-                                    <option value="VT">Vermont</option>
-                                    <option value="VA">Virginia</option>
-                                    <option value="WA">Washington</option>
-                                    <option value="WV">West Virginia</option>
-                                    <option value="WI">Wisconsin</option>
-                                    <option value="WY">Wyoming</option>
+                                    data-actions-box="true" data-live-search="true" onchange=loadCollegeMap() multiple>
+                                    <option value="AL" selected>Alabama</option>
+                                    <option value="AK" selected>Alaska</option>
+                                    <option value="AZ" selected>Arizona</option>
+                                    <option value="AR" selected>Arkansas</option>
+                                    <option value="CA" selected>California</option>
+                                    <option value="CO" selected>Colorado</option>
+                                    <option value="CT" selected>Connecticut</option>
+                                    <option value="DE" selected>Delaware</option>
+                                    <option value="FL" selected>Florida</option>
+                                    <option value="GA" selected>Georgia</option>
+                                    <option value="HI" selected>Hawaii</option>
+                                    <option value="ID" selected>Idaho</option>
+                                    <option value="IL" selected>Illinois</option>
+                                    <option value="IN" selected>Indiana</option>
+                                    <option value="IA" selected>Iowa</option>
+                                    <option value="KS" selected>Kansas</option>
+                                    <option value="KY" selected>Kentucky</option>
+                                    <option value="LA" selected>Louisiana</option>
+                                    <option value="ME" selected>Maine</option>
+                                    <option value="MD" selected>Maryland</option>
+                                    <option value="MA" selected>Massachusetts</option>
+                                    <option value="MI" selected>Michigan</option>
+                                    <option value="MN" selected>Minnesota</option>
+                                    <option value="MS" selected>Mississippi</option>
+                                    <option value="MO" selected>Missouri</option>
+                                    <option value="MT" selected>Montana</option>
+                                    <option value="NE" selected>Nebraska</option>
+                                    <option value="NV" selected>Nevada</option>
+                                    <option value="NH" selected>New Hamshire</option>
+                                    <option value="NJ" selected>New Jersey</option>
+                                    <option value="NM" selected>New Mexico</option>
+                                    <option value="NY" selected>New York</option>
+                                    <option value="NC" selected>North Carolina</option>
+                                    <option value="ND" selected>North Dakota</option>
+                                    <option value="OH" selected>Ohio</option>
+                                    <option value="OK" selected>Oklahoma</option>
+                                    <option value="OR" selected>Oregon</option>
+                                    <option value="PA" selected>Pennsylvania</option>
+                                    <option value="RI" selected>Rhode Island</option>
+                                    <option value="SC" selected>South Carolina</option>
+                                    <option value="SD" selected>South Dakota</option>
+                                    <option value="TN" selected>Tennessee</option>
+                                    <option value="TX" selected>Texas</option>
+                                    <option value="UT" selected>Utah</option>
+                                    <option value="VT" selected>Vermont</option>
+                                    <option value="VA" selected>Virginia</option>
+                                    <option value="WA" selected>Washington</option>
+                                    <option value="WV" selected>West Virginia</option>
+                                    <option value="WI" selected>Wisconsin</option>
+                                    <option value="WY" selected>Wyoming</option>
 
                                 </select>
                             </div>
@@ -253,19 +253,19 @@
                     <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#collegeQuiz">
                         <div class="card-body">
                             <input type="checkbox" class="test-score" id="SAT_score" name="SAT_score" value="SAT"
-                                onchange=loadCollegeMap()>
+                                onchange=enableSAT() checked>
                             <label for="SAT_score">SAT</label></br>
                             <label for="SAT_score_points">Score (between 0 and 1600):&nbsp</label><label
                                 for="SAT_score_points" id="SATNumber">1600</label></br>
-                            <input type="range" id="SAT_score_points" name="SAT_score_points" min="0" max="1600"
+                            <input type="number" id="SAT_score_points" name="SAT_score_points" min="0" max="1600"
                                 value="1600" onchange=updateSATLabel();loadCollegeMap()></br>
                             <input type="checkbox" class="test-score" id="ACT_score" name="ACT_score" value="ACT"
-                                onchange=loadCollegeMap()>
+                                onchange=enableACT() checked>
                             <label for="ACT_score">ACT</label></br>
                             <label for="ACT_score_points">Score (between 0 and 36):&nbsp</label><label
                                 for="ACT_score_points" id="ACTNumber">36</label></br>
-                            <input type="range" id="ACT_score_points" name="ACT_score_points" min="0" max="36" value="36"
-                                onchange=updateACTLabel();loadCollegeMap()></br>
+                            <input type="number" id="ACT_score_points" name="ACT_score_points" min="0" max="36"
+                                value="36" onchange=updateACTLabel();loadCollegeMap()></br>
                         </div>
                     </div>
                 </div>
@@ -400,24 +400,18 @@
             var allData = await d3.json('filteredCollegeData.json');
 
             //get states
-            var state = d3.select('#states').property("value");
+            let states = new Set()
+            var selectedStates = d3.select('#states')
+                .selectAll("option")
+                .filter(function (d, i) {
+                    return this.selected;
+                });
+            selectedStates._groups[0].forEach((d, i) => {
+                states.add(d.value)
+            })
 
-            var states = [];
-            $('#states').on('change', function() {
-                var values = $(this).val();
-                states = values; 
-                console.log(values);
-                console.log(states); 
-
-            });
-
-            //TO DO: need to change this to a forEach loop
-            //TO DO: get state
-            // newData = allData.filter((d) => {
-            //     return (d.state = state)
-            // })
-
-
+            console.log(states)
+            //get tuition
             var tuition = d3.select('#tuition').property("value")
             d3.select('#tuitionNumber').text("$" + formatNumber(tuition))
 
@@ -426,44 +420,54 @@
             var checkedSize = d3.selectAll("input.size:checked")._groups[0];
             checkedSize.forEach((d) => {
                 if (Number(d.value) == 100) {
-                    sizes.push([0,100])
+                    sizes.push([0, 100])
                 } else if (Number(d.value) == 1000) {
-                    sizes.push([100,1000])
-                }else if (Number(d.value) == 10000) {
-                    sizes.push([1000,10000])
-                }else if (Number(d.value) == 50000) {
-                    sizes.push([10000,50000])
-                }else if (Number(d.value) == 100000) {
-                    sizes.push([50000,100000])
+                    sizes.push([100, 1000])
+                } else if (Number(d.value) == 10000) {
+                    sizes.push([1000, 10000])
+                } else if (Number(d.value) == 50000) {
+                    sizes.push([10000, 50000])
+                } else if (Number(d.value) == 100000) {
+                    sizes.push([50000, 100000])
                 }
             });
+
             //get test scores
             var [SATVal, ACTVal] = clickTestScore();
 
-            console.log(state, tuition, sizes, SATVal, ACTVal)
+            console.log(states, tuition, sizes, SATVal, ACTVal)
 
             //call UpdateData
-            UpdateData(allData, state, tuition, sizes, SATVal, ACTVal)
+            UpdateData(allData, states, tuition, sizes, SATVal, ACTVal)
         }
 
         loadCollegeMap();
 
         //helper functions!
-        function UpdateData(allData, state, tuition, sizes, SATVal, ACTVal) {
+        function UpdateData(allData, states, tuition, sizes, SATVal, ACTVal) {
             var newData = allData.filter((d) => {
-                return (d.tuition <= tuition)
+                return (d.tuition <= tuition &&
+                states.has(d.state))
             })
+            console.log("new data" + newData)
+            sizedData = [];
+            sizes.forEach((d) => {
+              let filtered = newData.filter(e => {return console.log(e + " d[0]: " + d[0] + " d[1]: " + d[1]), e.size >= d[0] && e.size <= d[1] });
+                sizedData.push(filtered)
+            })
+            newData = sizedData.flat();
+            console.log(newData)
 
             if (SATVal != null) {
-            var newData = newData.filter((d) => {
-                return (d.SAT <= SATVal)
+                var newData = newData.filter((d) => {
+                    return (d.SAT <= SATVal)
                 })
                 return (newData)
             }
 
             if (ACTVal != null) {
-            var newData = newData.filter((d) => {
-                return (d.SAT <= SATVal)
+                var newData = newData.filter((d) => {
+                    return (d.ACT <= ACTVal)
                 })
                 return (newData)
             }
@@ -481,9 +485,6 @@
 
         //choose Test Scoring Type
         function clickTestScore() {
-            SATVal = null;
-            ACTVal = null;
-
             var checkedTest = d3.selectAll('input.test-score:checked')._groups[0];
             checkedTest.forEach((d) => {
                 if (d.value == "SAT") {
@@ -494,6 +495,7 @@
             });
             return [SATVal, ACTVal]
         }
+
         function updateSATLabel() {
             var SATVal = d3.select('#SAT_score_points').property("value")
             d3.select('#SATNumber').text(SATVal)
@@ -504,6 +506,15 @@
             console.log(ACTVal)
             d3.select('#ACTNumber').text(ACTVal)
         }
+
+        function enableSAT() {
+            //To do
+        }
+
+        function enableACT() {
+            //To do
+        }
+
 
         const drawCircles = async (newData) => {
             var us = await d3.json("../static/us.json");
