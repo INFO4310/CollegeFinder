@@ -92,6 +92,19 @@
         #tuition {
             width: 80px;
         }
+
+        .state:hover {
+            cursor: pointer;
+        }
+
+        .active {
+            fill: "#4f47f2";
+        }
+
+        .card-body {
+            padding: 20px 0px 20px 20px;
+            background-color: lavender;
+        }
     </style>
 </head>
 
@@ -264,7 +277,7 @@
                             <input type="number" id="SAT_score_points" name="SAT_score_points" min="0" max="1600"
                                 value="1600" onchange=updateSATLabel();loadCollegeMap()></br>
                             <input type="checkbox" class="test-score" id="ACT_score" name="ACT_score" value="ACT"
-                                onchange=enableACT();loadCollegeMap() checked>
+                                onchange=enableACT();loadCollegeMap() checked></br>
                             <label for="ACT_score">ACT</label></br>
                             <label for="ACT_score_points">Score (between 0 and 36):&nbsp</label><label
                                 for="ACT_score_points" id="ACTNumber">36</label></br>
@@ -294,7 +307,7 @@
         const map = mapsvg.append("g")
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
             .attr("id", "map");
-        const g=map.append("g");
+        const g = map.append("g");
 
         ////////////////////////////initial data manipulation/////////////////////////
         //     const data = await d3.csv('MERGED2018_19_PP.csv');
@@ -348,12 +361,12 @@
 
             var active = d3.select(null);
             map.on("click", stopped, true);
-            
+
             map.call(zoom)
 
             //topographic features
             var states = topojson.feature(us, us.objects.states);
-            var statesMesh = topojson.mesh(us, us.objects.states);
+            // var statesMesh = topojson.mesh(us, us.objects.states);
             var projection = d3.geoAlbersUsa().fitSize([mapWidth, mapHeight], states);
             var path = d3.geoPath().projection(projection);
 
@@ -364,19 +377,21 @@
                 .attr("note", d => d.id)
                 .attr("d", path)
                 .attr("fill", "#1c1c1c")
-                .attr("stroke", "1c1c1c")
-                .attr("stroke-width", 1)
-                .on("click", clicked);
-
-            g.append("path").datum(statesMesh)
-                .attr("class", "outline")
-                .attr("d", path)
-                .attr("fill", "#1c1c1c")
                 .attr("stroke", "white")
-                .attr("stroke-width", 1);
+                .attr("stroke-width", 2)
+                .on("click", clicked)
+                .on("mouseover", function (d) {
+                    state = d3.select(this)
+                    if (state.classed("active") == false) {
+                            state.attr("fill", "#4f47f2")
+                    }
+                }).on("mouseout", function (d) {
+                    d3.select(this).attr("fill", "#1c1c1c")
+                })
+            
 
             let infoWidth = 150;
-            let infoHeight = 50;
+            let infoHeight = 100;
 
             let infoBox = mapsvg.append("g")
                 .attr("id", "infoBox")
@@ -399,13 +414,13 @@
                 .attr("text-anchor", "start")
                 .attr("alignment-baseline", "text-before-edge")
                 .attr("font-weight", "bold");
-        
+
             //modified from https://bl.ocks.org/iamkevinv/0a24e9126cd2fa6b283c6f2d774b69a2
             function clicked(d) {
+                
                 if (active.node() === this) return reset();
                 active.classed("active", false);
                 active = d3.select(this).classed("active", true);
-
                 var bounds = path.bounds(d),
                     dx = bounds[1][0] - bounds[0][0],
                     dy = bounds[1][1] - bounds[0][1],
@@ -417,7 +432,7 @@
 
                 g.transition()
                     .duration(750)
-                    .call( zoom.transform, d3.zoomIdentity.translate(translate[0],translate[1]).scale(scale) ); 
+                    .call(zoom.transform, d3.zoomIdentity.translate(translate[0], translate[1]).scale(scale));
             }
 
             function reset() {
@@ -426,12 +441,12 @@
 
                 g.transition()
                     .duration(750)
-                    .call( zoom.transform, d3.zoomIdentity );
+                    .call(zoom.transform, d3.zoomIdentity);
             }
 
             function zoomed() {
                 g.style("stroke-width", 1.5 / d3.event.transform.k + "px");
-                g.attr("transform", d3.event.transform); 
+                g.attr("transform", d3.event.transform);
             }
             function stopped() {
                 if (d3.event.defaultPrevented) d3.event.stopPropagation();
@@ -548,7 +563,7 @@
                 .attr("id", d => d.name)
                 .attr("cx", d => projection(d.location)[0])
                 .attr("cy", d => projection(d.location)[1])
-                .attr("r", 4)
+                .attr("r", 7)
                 .attr("fill", "#9b3080")
                 .style("opacity", .7);
 
@@ -589,10 +604,14 @@
                 college.transition().duration(200);
 
                 d3.select("#infoBox").attr("visibility", "visible")
-                    .attr("transform", "translate(" + (coordinates[0] - 10) + "," + (coordinates[1]) + ")");
+                    .attr("transform", "translate(" + (coordinates[0]) + "," + (coordinates[1]) + ")");
 
-                d3.select("#collegeName").text(college.datum().name)
+                collegeLabel = college.datum().name + ", $" + college.datum().tuition + ", " + college.datum().size + " students";
+
+                d3.select("#collegeName").text(collegeLabel)
                     .call(wrap, 100);
+
+                d3.select(this).attr("stroke", "white").attr("stroke-width", 3)
             })
 
             circle.on("mouseout", function () {
@@ -603,6 +622,8 @@
 
                 d3.select("#infoBox").attr("visibility", "hidden");
                 d3.select("#collegeName").text("");
+
+                d3.select(this).attr("stroke", "none")
             })
         }
 
