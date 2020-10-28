@@ -115,7 +115,7 @@
             <h1>CollegeCompass: US College Finder</h1>
         </div>
     </div>
-    <!-- more information can be found here: https://getbootstrap.com/docs/4.3/components/collapse/ -->
+    <!-- Using bootstrap accordion for quiz functionalities: https://getbootstrap.com/docs/4.3/components/collapse/ -->
     <div class="row">
         <div class="col col-md-4 col-sm-12">
             <div class="accordion" id="collegeQuiz">
@@ -136,6 +136,7 @@
                             <div id="location-selector">
                                 <label for="states">Choose a state:</label></br>
 
+                                <!-- using bootstrap-select library for searchable select input: https://developer.snapappointments.com/bootstrap-select/ -->
                                 <select name="states" id="states" data-size="4" class="selectpicker"
                                     data-actions-box="true" data-live-search="true" onchange=loadCollegeMap() multiple>
                                     <option value="AL" selected>Alabama</option>
@@ -250,7 +251,6 @@
                             <label for="size5">50,000 - 100,000 students</label><br>
 
                             <br>
-                            <!-- <input type="submit" value="Submit"> -->
                         </div>
                     </div>
                 </div>
@@ -289,13 +289,14 @@
             </div>
             <!-- End card for Test Scores -->
         </div>
+
         <!-- Map SVG-->
         <div class="col col-md-8 col-sm-12">
             <svg id="map" width="800" height="500"></svg>
         </div>
     </div>
     <script>
-        ////////////////////////////ESTABLISHING GLOBALLY USED VARIABLEs/////////////////////////
+        ////////////////////////////ESTABLISHING GLOBALLY USED VARIABLES/////////////////////////
 
         //map attributes
         const mapsvg = d3.select("#map");
@@ -339,7 +340,8 @@
         //         // d.admissions = Number(d.admissions);
         //     });
 
-        //get values for input slider: tuition
+        // // get values for input slider: tuition
+
         // fees = []
         // allData.forEach((d,i) => {
         //     fees.push(d.tuition)
@@ -350,11 +352,12 @@
         //     // // console.log(newData);
         //     console.log(JSON.stringify(newData))
 
-        //////////////////////////////DRAW MAP BACKGROUND///////////////////////////////
-        //load data
+        //////////////////////////////DRAW MAP BACKGROUND ONCE///////////////////////////////
         const drawMap = async () => {
             var us = await d3.json("../static/us.json");
 
+
+            //creating zoom-able functionality
             var zoom = d3.zoom()
                 .scaleExtent([1, 8])
                 .on("zoom", zoomed);
@@ -366,7 +369,6 @@
 
             //topographic features
             var states = topojson.feature(us, us.objects.states);
-            // var statesMesh = topojson.mesh(us, us.objects.states);
             var projection = d3.geoAlbersUsa().fitSize([mapWidth, mapHeight], states);
             var path = d3.geoPath().projection(projection);
 
@@ -382,6 +384,8 @@
                 .on("click", clicked)
                 .on("mouseover", function (d) {
                     state = d3.select(this)
+                    //hover effect not available for zoomed in states
+                    //because it clashed with hover of circles
                     if (state.classed("active") == false) {
                             state.attr("fill", "#4f47f2")
                     }
@@ -389,7 +393,7 @@
                     d3.select(this).attr("fill", "#1c1c1c")
                 })
             
-
+            //drawing the text box for labels
             let infoWidth = 150;
             let infoHeight = 100;
 
@@ -415,7 +419,7 @@
                 .attr("alignment-baseline", "text-before-edge")
                 .attr("font-weight", "bold");
 
-            //modified from https://bl.ocks.org/iamkevinv/0a24e9126cd2fa6b283c6f2d774b69a2
+            //zoom functionalities modified from https://bl.ocks.org/iamkevinv/0a24e9126cd2fa6b283c6f2d774b69a2
             function clicked(d) {
                 
                 if (active.node() === this) return reset();
@@ -455,11 +459,11 @@
         drawMap()
 
 
-        ////////////////////////////////////GET ALL INPUT VALUES AND CALL HELPER FUNCTIONS/////////////////////////////////////
+        ////////////////////////////////////GET ALL INPUT VALUES FROM QUIZ AND CALL HELPER FUNCTIONS/////////////////////////////////////
         const loadCollegeMap = async () => {
             var allData = await d3.json('filteredCollegeData.json');
 
-            //get states
+            //get states inputs and create filtering object and label for quiz
             let states = new Set()
             let statesArr = [];
             var selectedStates = d3.select('#states')
@@ -477,12 +481,12 @@
                 d3.select("#location-btn").text("Location: " + statesArr)
             }
 
-            //get tuition
+            //get tuition & update label
             var tuition = d3.select('#tuition').property("value")
             d3.select('#tuitionNumber').text("$" + formatNumber(tuition))
             d3.select("#tuition-btn").text("Tuition: $" + formatNumber(tuition))
 
-            //get sizes
+            //get sizes & create label
             var sizes = [];
             var sizeLbl = [];
             var checkedSize = d3.selectAll("input.size:checked")._groups[0];
@@ -504,13 +508,10 @@
                     sizeLbl.push("50000-100000")
                 }
             });
-
             d3.select('#size-btn').text("Number of Students: " + sizeLbl.join(', '))
 
             //get test scores
             var [SATVal, ACTVal] = clickTestScore();
-
-            console.log(states, tuition, sizes, SATVal, ACTVal)
 
             //call UpdateData
             UpdateData(allData, states, tuition, sizes, SATVal, ACTVal)
@@ -519,7 +520,9 @@
         loadCollegeMap();
 
         ////////////////////////////////////FILTER ALL DATA GIVEN INPUTS/////////////////////////////////////
-        //filter data given all inputs
+
+        //UpdateData() filters the entire dataset using the input variables from the quiz
+        //it refines the data and calls a second function drawCircles() to redraw the map
         function UpdateData(allData, states, tuition, sizes, SATVal, ACTVal) {
             var newData = allData.filter((d) => {
                 return (d.tuition <= tuition &&
@@ -532,6 +535,7 @@
             })
             newData = sizedData.flat();
 
+            //SATVal and ACTVal can be either null or not null but cannot be BOTH null at same time
             if (SATVal != null && ACTVal != null) {
                 d3.select('#test-btn').text("Test Scores: SAT(" + SATVal + "), ACT(" + ACTVal + ")")
                 var newData = newData.filter((d) => {
@@ -549,10 +553,14 @@
                 })
             }
 
+            //redrawing circles on existing map
             drawCircles(newData)
         }
 
         ////////////////////////////////////REDRAW CIRCLES WITH NEW FILTERED DATA/////////////////////////////////////
+        //drawCircles() takes in the filtered data and redraws the appropriate circles/colleges
+        //drawCircles also handles the mouseover functionalities including 
+        //showing the label and changing the circle styles
         const drawCircles = async (newData) => {
             var us = await d3.json("../static/us.json");
             var states = topojson.feature(us, us.objects.states);
@@ -596,7 +604,7 @@
                     }
                 });
             }
-
+            //mouseover/mouseout functionalities
             circle.on("mouseover", function () {
                 let college = d3.select(this);
                 var coordinates = d3.mouse(this);
@@ -608,6 +616,8 @@
 
                 collegeLabel = college.datum().name + ", $" + college.datum().tuition + ", " + college.datum().size + " students";
 
+                //adding text to the label
+                //wrapped using the above wrapping function
                 d3.select("#collegeName").text(collegeLabel)
                     .call(wrap, 100);
 
@@ -627,21 +637,21 @@
             })
         }
 
-        ////////////////////////////////////HELPER FUNCTIONS/////////////////////////////////////
-        //present number with comma
+        ////////////////////////////////////HELPER FUNCTIONS FOR QUIZ INPUTS/////////////////////////////////////
+        //formatNumber() returns a string of the number with a comma 8000 => "8,000"
         function formatNumber(num) {
             format = d3.format(",");
             return (format(num))
         }
 
-        //choose Test Scoring Type
+        //clickTestScore() is called when when either the SAT or ACT checkbox is changed
+        //handles getting either the SAT/ACT or both values, returns null if input box is disabled
         function clickTestScore() {
             var SATVal = null;
             var ACTVal = null;
 
             var checkedTest = d3.selectAll('input.test-score:checked')._groups[0];
             checkedTest.forEach((d) => {
-                console.log("should be either SAT or ACT " + d.value)
                 if (d.value == "SAT") {
                     SATVal = Number(d3.select('#SAT_score_points').property("value"))
                 } else if (d.value == "ACT") {
@@ -651,6 +661,7 @@
             return [SATVal, ACTVal]
         }
 
+        //updateSATLabel() and updateACTLabel() gets input values and shows value in label
         function updateSATLabel() {
             var SATVal = d3.select('#SAT_score_points').property("value")
             d3.select('#SATNumber').text(SATVal)
@@ -661,6 +672,8 @@
             d3.select('#ACTNumber').text(ACTVal)
         }
 
+        //enableSAT() is called whenever the SAT checkbox is called
+        //disables/enables SAT input depending on whether or not ACT is disabled
         function enableSAT() {
             SATcheck = d3.select("input#SAT_score")._groups[0][0];
             ACTcheck = d3.select("input#ACT_score")._groups[0][0];
@@ -675,6 +688,7 @@
             }
         }
 
+        //like enableSAT but for ACT
         function enableACT() {
             ACTcheck = d3.select("input#ACT_score")._groups[0][0];
             SATcheck = d3.select("input#SAT_score")._groups[0][0];
